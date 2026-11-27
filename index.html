@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creamuebles — Diseño de Mobiliario Minimalista a Medida</title>
+  <meta
+    name="description"
+    content="Creamuebles: estudio de diseño de mobiliario nórdico y contemporáneo a medida. Configura tu mueble en tiempo real eligiendo maderas, piedras, metales, textiles y acabados."
+  />
+
+  <!-- Tipografía Editorial & Contemporánea -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Navegación Principal Fija -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="#inicio" class="brand" aria-label="Creamuebles - Inicio">
+        <svg class="brand-mark" viewBox="0 0 32 32" width="28" height="28" fill="none" aria-hidden="true">
+          <rect x="3" y="6" width="26" height="4" rx="1" stroke="currentColor" stroke-width="1.6" />
+          <path d="M7 10V26M25 10V26M7 17H25" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+        <span class="brand-name">Creamuebles</span>
+      </a>
+
+      <nav class="main-nav" id="main-nav" aria-label="Navegación principal">
+        <a href="#inicio" class="nav-link active" data-section="inicio">Inicio</a>
+        <a href="#configurador" class="nav-link" data-section="configurador">Diseña tu Mueble</a>
+        <a href="#historia" class="nav-link" data-section="historia">Historia</a>
+        <a href="#contacto" class="nav-link" data-section="contacto">Contacto</a>
+      </nav>
+
+      <div class="header-actions">
+        <a href="#configurador" class="btn btn-sm btn-outline">Estudio 2D/SVG</a>
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          type="button"
+          aria-label="Abrir menú de navegación"
+          aria-expanded="false"
+        >
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- =========================================================
+         SECCIÓN 1: INICIO (HERO & FILOSOFÍA)
+         ========================================================= -->
+    <section id="inicio" class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-content reveal">
+          <span class="eyebrow">Estudio de Diseño Nórdico &amp; Contemporáneo</span>
+          <h1 class="hero-title">Creamuebles</h1>
+          <p class="hero-slogan">
+            Arquitectura doméstica en estado puro. Mobiliario a medida concebido para respirar calma, honestidad material y equilibrio atemporal.
+          </p>
+          <p class="hero-intro">
+            Cada pieza nace en nuestro taller a partir de tus proporciones, la nobleza de los materiales naturales y el oficio artesanal contemporáneo.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#configurador" class="btn btn-primary btn-lg">
+              <span>Diseña tu mueble</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <a href="#historia" class="btn btn-ghost btn-lg">Conoce nuestra historia</a>
+          </div>
+        </div>
+
+        <div class="hero-media reveal" data-delay="120">
+          <div class="hero-image-frame">
+            <img
+              src="assets/hero-living.jpg"
+              alt="Salón minimalista de inspiración nórdica con mobiliario de madera natural diseñado por Creamuebles"
+              class="hero-img"
+            />
+            <div class="hero-caption">
+              <span class="caption-dot"></span>
+              <span>Colección Atelier · Roble europeo y lino crudo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filosofía de diseño a medida -->
+      <div class="container philosophy-strip reveal" data-delay="180">
+        <div class="philosophy-lead">
+          <span class="eyebrow">Nuestra Filosofía</span>
+          <h2>Diseñamos muebles que se adaptan a tu espacio, nunca al revés.</h2>
+        </div>
+        <div class="philosophy-pillars">
+          <article class="pillar-card">
+            <span class="pillar-num">01</span>
+            <h3>Proporción &amp; Calma</h3>
+            <p>Geometrías depuradas de inspiración escandinava que liberan el espacio y realzan la luz natural de cada estancia.</p>
+          </article>
+          <article class="pillar-card">
+            <span class="pillar-num">02</span>
+            <h3>Materia Honesta</h3>
+            <p>Trabajamos con maderas certificadas, piedras naturales, metales cepillados y textiles orgánicos sin artificios.</p>
+          </article>
+          <article class="pillar-card">
+            <span class="pillar-num">03</span>
+            <h3>Hecho Bajo Pedido</h3>
+            <p>Sin excedentes ni producción en masa. Cada diseño configurado se fabrica pieza a pieza en nuestro estudio.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN 2: DISEÑA TU MUEBLE (CONFIGURADOR INTERACTIVO)
+         ========================================================= -->
+    <section id="configurador" class="configurator-section">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="eyebrow">Estudio Interactivo en Tiempo Real</span>
+            <h2 class="section-title">Diseña tu Mueble</h2>
+          </div>
+          <p class="section-subtitle">
+            Selecciona la tipología, explora nuestra biblioteca de materiales nobles y personaliza los tonos de la estructura y los detalles para visualizar tu pieza al instante.
+          </p>
+        </div>
+
+        <div class="studio-layout">
+          <!-- Columna Izquierda: Vista Previa Grande -->
+          <div class="studio-stage reveal" data-delay="80">
+            <div class="stage-topbar">
+              <div class="stage-title-group">
+                <span class="stage-badge" id="stage-category-badge">Mesa de comedor</span>
+                <span class="stage-dimensions" id="stage-dimensions">220 × 100 × 75 cm</span>
+              </div>
+              <div class="stage-controls">
+                <button type="button" class="stage-tool-btn" id="toggle-grid-btn" title="Mostrar/ocultar cotas arquitectónicas" aria-pressed="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M4 7h16M4 17h16M7 4v16M17 4v16" />
+                  </svg>
+                  <span>Cotas</span>
+                </button>
+                <button type="button" class="stage-tool-btn" id="reset-config-btn" title="Restablecer diseño inicial">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span>Reiniciar</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="svg-viewport" id="svg-viewport">
+              <!-- El SVG interactivo se genera y actualiza dinámicamente desde js/svg-renderer.js -->
+              <svg
+                id="furniture-svg"
+                viewBox="0 0 920 600"
+                width="100%"
+                height="100%"
+                role="img"
+                aria-label="Vista previa interactiva del mueble configurado"
+              ></svg>
+            </div>
+
+            <div class="stage-bottombar">
+              <div class="active-material-pill">
+                <span class="material-mini-swatch" id="stage-material-swatch"></span>
+                <div>
+                  <strong id="stage-material-name">Roble natural</strong>
+                  <span id="stage-material-desc">Veta orgánica cálida y tacto sedoso mate</span>
+                </div>
+              </div>
+              <div class="active-colors-pill">
+                <div class="color-chip">
+                  <span class="dot" id="stage-primary-dot"></span>
+                  <span>Estructura: <strong id="stage-primary-hex">#C69C6D</strong></span>
+                </div>
+                <div class="color-chip">
+                  <span class="dot" id="stage-detail-dot"></span>
+                  <span>Detalles: <strong id="stage-detail-hex">#1E1E1E</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Panel de Configuración Lateral -->
+          <aside class="studio-panel reveal" data-delay="140" aria-label="Panel de configuración del mueble">
+            <!-- 1. Tipo de Mueble -->
+            <div class="config-block">
+              <div class="config-block-header">
+                <span class="step-tag">01</span>
+                <h3>Tipo de Mueble</h3>
+              </div>
+              <div class="furniture-grid" id="furniture-selector" role="radiogroup" aria-label="Tipo de mueble"></div>
+            </div>
+
+            <!-- 2. Materiales por Categorías -->
+            <div class="config-block">
+              <div class="config-block-header">
+                <span class="step-tag">02</span>
+                <h3>Material y Textura</h3>
+              </div>
+              <div class="material-tabs" id="material-tabs" role="tablist" aria-label="Categorías de material"></div>
+              <div class="materials-grid" id="materials-grid" role="radiogroup" aria-label="Opciones de material"></div>
+            </div>
+
+            <!-- 3. Selector de Color y Acabado -->
+            <div class="config-block">
+              <div class="config-block-header">
+                <span class="step-tag">03</span>
+                <h3>Color y Acabado</h3>
+              </div>
+
+              <div class="color-target-bar">
+                <div class="segmented-control" role="tablist" aria-label="Zona de aplicación del color">
+                  <button type="button" class="seg-btn active" data-target="primary" role="tab" aria-selected="true">
+                    Estructura principal
+                  </button>
+                  <button type="button" class="seg-btn" data-target="detail" role="tab" aria-selected="false">
+                    Detalles / Patas
+                  </button>
+                </div>
+                <label class="sync-toggle">
+                  <input type="checkbox" id="sync-colors-checkbox" />
+                  <span>Unificar tono</span>
+                </label>
+              </div>
+
+              <div class="color-palette" id="color-palette" role="radiogroup" aria-label="Paleta de colores curada"></div>
+
+              <div class="custom-color-row">
+                <label for="custom-color-input" class="custom-color-label">
+                  <span>Color personalizado</span>
+                  <small id="active-target-hint">Aplicando a estructura principal</small>
+                </label>
+                <div class="custom-color-controls">
+                  <input type="color" id="custom-color-input" value="#C69C6D" aria-label="Selector de color libre" />
+                  <input
+                    type="text"
+                    id="custom-hex-input"
+                    value="#C69C6D"
+                    maxlength="7"
+                    spellcheck="false"
+                    aria-label="Código hexadecimal de color"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Ficha Resumen en Tiempo Real y Acción -->
+            <div class="summary-card" id="summary-card">
+              <div class="summary-header">
+                <div>
+                  <span class="summary-eyebrow">Resumen de Configuración</span>
+                  <h4 id="summary-furniture-name">Mesa de comedor</h4>
+                </div>
+                <div class="summary-price-box">
+                  <span class="price-label">Precio orientativo</span>
+                  <strong class="price-value" id="summary-price">1.490 €</strong>
+                </div>
+              </div>
+
+              <dl class="summary-specs">
+                <div class="spec-row">
+                  <dt>Material</dt>
+                  <dd id="summary-material">Maderas · Roble natural</dd>
+                </div>
+                <div class="spec-row">
+                  <dt>Estructura principal</dt>
+                  <dd id="summary-primary-color">
+                    <span class="spec-swatch" id="summary-primary-swatch"></span>
+                    <span id="summary-primary-text">Madera natural (#C69C6D)</span>
+                  </dd>
+                </div>
+                <div class="spec-row">
+                  <dt>Detalles / Patas</dt>
+                  <dd id="summary-detail-color">
+                    <span class="spec-swatch" id="summary-detail-swatch"></span>
+                    <span id="summary-detail-text">Negro mate (#1E1E1E)</span>
+                  </dd>
+                </div>
+              </dl>
+
+              <button type="button" class="btn btn-primary btn-block" id="request-quote-btn">
+                <span>Solicitar presupuesto con este diseño</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN 3: NUESTRA HISTORIA (SOBRE NOSOTROS)
+         ========================================================= -->
+    <section id="historia" class="history-section">
+      <div class="container">
+        <div class="history-top-grid">
+          <div class="history-narrative reveal">
+            <span class="eyebrow">Nuestra Historia</span>
+            <h2 class="section-title">De la materia prima al refugio cotidiano.</h2>
+            <p class="lead-paragraph">
+              Creamuebles nació de una convicción compartida: los objetos que habitan nuestro hogar deberían envejecer con dignidad, contar una historia y responder con exactitud a nuestra forma de vivir.
+            </p>
+            <p>
+              Fundada por <strong>Alejandro Pachón</strong> y <strong>María Fernández</strong>, nuestra firma une la serenidad formal del diseño nórdico con la tradición ebanista mediterránea. Frente a la fugacidad del mobiliario industrial, apostamos por piezas atemporales fabricadas bajo pedido en nuestro taller.
+            </p>
+            <p>
+              Cada encargo comienza con un diálogo honesto sobre el espacio, la luz y el tacto de los materiales: maderas europeas de tala controlada, piedras naturales sin tratamientos agresivos, metales de acabado artesanal y tapizados orgánicos.
+            </p>
+          </div>
+
+          <div class="history-media reveal" data-delay="120">
+            <figure class="editorial-figure">
+              <img
+                src="assets/atelier-craft.jpg"
+                alt="Banco de trabajo artesanal en el taller de Creamuebles con muestras de madera noble, piedra y latón"
+                loading="lazy"
+              />
+              <figcaption>Taller Creamuebles · Selección manual de vetas, piedras y herrajes.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Valores fundamentales -->
+        <div class="values-grid reveal" data-delay="100">
+          <article class="value-item">
+            <div class="value-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z" />
+                <path d="M12 12l8-4.5M12 12v9M12 12L4 7.5" />
+              </svg>
+            </div>
+            <h3>Artesanía Contemporánea</h3>
+            <p>Ensambles tradicionales reforzados con precisión técnica para lograr piezas sólidas, silenciosas y duraderas.</p>
+          </article>
+
+          <article class="value-item">
+            <div class="value-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 21c-4.5-3.2-7-6.8-7-10.5A7 7 0 0 1 19 10.5C19 14.2 16.5 17.8 12 21z" />
+                <path d="M12 10v6M9.5 12.5L12 10l2.5 2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h3>Sostenibilidad Real</h3>
+            <p>Maderas con certificación FSC, aceites naturales sin disolventes y proveedores locales de proximidad.</p>
+          </article>
+
+          <article class="value-item">
+            <div class="value-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="4" width="16" height="16" rx="2" />
+                <path d="M9 4v16M4 12h5" />
+              </svg>
+            </div>
+            <h3>Diseño a Medida</h3>
+            <p>Adaptamos proporciones, acabados y combinaciones de color a la arquitectura única de tu proyecto.</p>
+          </article>
+        </div>
+
+        <!-- Equipo Fundador -->
+        <div class="founders-showcase reveal" data-delay="120">
+          <div class="founders-photo-wrap">
+            <img
+              src="assets/founders-studio.jpg"
+              alt="Alejandro Pachón y María Fernández revisando bocetos y muestras de madera en el estudio Creamuebles"
+              loading="lazy"
+            />
+          </div>
+          <div class="founders-info">
+            <span class="eyebrow">Equipo Fundador</span>
+            <h3>Alejandro Pachón &amp; María Fernández</h3>
+            <p class="founders-intro">
+              Al frente de Creamuebles desde el primer trazo hasta la entrega en tu hogar, acompañando personalmente cada proyecto a medida.
+            </p>
+            <div class="founders-cards">
+              <div class="founder-card">
+                <h4>Alejandro Pachón</h4>
+                <span class="founder-role">Cofundador · Diseño Industrial y Ebanistería</span>
+                <p>Especializado en arquitectura de mobiliario y estructuras limpias. Supervisa la ingeniería constructiva y la precisión de cada ensamble en taller.</p>
+              </div>
+              <div class="founder-card">
+                <h4>María Fernández</h4>
+                <span class="founder-role">Cofundadora · Arquitectura Interior y Materiales</span>
+                <p>Curadora de acabados, paletas cromáticas y texturas nobles. Dirige el asesoramiento personalizado a clientes y estudios de interiorismo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN 4: CONTACTO
+         ========================================================= -->
+    <section id="contacto" class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- Información de contacto y responsables -->
+          <div class="contact-info reveal">
+            <span class="eyebrow">Hablemos de tu proyecto</span>
+            <h2 class="section-title">Contacto</h2>
+            <p class="contact-lead">
+              ¿Has diseñado tu pieza ideal en nuestro configurador o buscas un proyecto completo para tu vivienda? Escríbenos y recibirás una valoración detallada y muestras físicas de material.
+            </p>
+
+            <div class="contact-directors">
+              <span class="directors-label">Responsables de Atención y Diseño</span>
+              <div class="director-row">
+                <strong>Alejandro Pachón</strong>
+                <span>Diseño estructural, medidas especiales y taller</span>
+              </div>
+              <div class="director-row">
+                <strong>María Fernández</strong>
+                <span>Asesoramiento estético, materiales y presupuestos</span>
+              </div>
+            </div>
+
+            <ul class="contact-details-list">
+              <li>
+                <span class="detail-label">Correo electrónico</span>
+                <a href="mailto:hola@creamuebles.es">hola@creamuebles.es</a>
+              </li>
+              <li>
+                <span class="detail-label">Teléfono directo</span>
+                <a href="tel:+34910482315">+34 910 482 315</a>
+              </li>
+              <li>
+                <span class="detail-label">Estudio &amp; Showroom</span>
+                <span>Calle de Velázquez 74, Madrid · Atención con cita previa</span>
+              </li>
+              <li>
+                <span class="detail-label">Horario</span>
+                <span>Lunes a Viernes · 10:00 – 19:00 h</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Formulario de contacto -->
+          <div class="contact-form-wrap reveal" data-delay="120">
+            <div class="prefill-banner hidden" id="prefill-banner">
+              <div class="prefill-banner-text">
+                <span class="prefill-dot"></span>
+                <span>Configuración personalizada adjuntada desde el estudio.</span>
+              </div>
+              <button type="button" class="prefill-clear-btn" id="clear-prefill-btn">Limpiar diseño</button>
+            </div>
+
+            <form id="contact-form" class="contact-form" novalidate>
+              <div class="form-group">
+                <label for="contact-name">Nombre completo</label>
+                <input
+                  type="text"
+                  id="contact-name"
+                  name="name"
+                  placeholder="Ej. Laura Gómez"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="contact-email">Correo electrónico</label>
+                <input
+                  type="email"
+                  id="contact-email"
+                  name="email"
+                  placeholder="nombre@correo.com"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="contact-message">Mensaje y detalles de tu mueble</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows="7"
+                  placeholder="Cuéntanos qué pieza te gustaría crear, medidas aproximadas o cualquier duda..."
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-footer">
+                <p class="form-note">Respuesta personalizada por Alejandro o María en menos de 24 horas laborables.</p>
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <span>Enviar solicitud</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="form-feedback" id="form-feedback" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pie de página minimalista -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-name">Creamuebles</span>
+        <p>Mobiliario minimalista a medida · Alejandro Pachón &amp; María Fernández.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Enlaces rápidos">
+        <a href="#inicio">Inicio</a>
+        <a href="#configurador">Diseña tu Mueble</a>
+        <a href="#historia">Historia</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <div class="footer-legal">
+        <span>© 2026 Creamuebles. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/svg-renderer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
