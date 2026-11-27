@@ -284,6 +284,16 @@
           <stop offset="50%" stop-color="rgba(255,255,255,0.03)"/>
           <stop offset="100%" stop-color="rgba(0,0,0,0.10)"/>
         </linearGradient>
+        <pattern id="mat-bedding" width="12" height="12" patternUnits="userSpaceOnUse">
+          <rect width="12" height="12" fill="${detailHex}"/>
+          <line x1="0" y1="3" x2="12" y2="3" stroke="rgba(90,82,72,0.08)" stroke-width="1"/>
+          <line x1="4" y1="0" x2="4" y2="12" stroke="rgba(90,82,72,0.08)" stroke-width="1"/>
+        </pattern>
+        <pattern id="mat-bedding-throw" width="14" height="14" patternUnits="userSpaceOnUse">
+          <rect width="14" height="14" fill="${shadeHex(detailHex, isDetailDark ? 0.16 : -0.10)}"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <circle cx="10" cy="10" r="2" fill="none" stroke="rgba(60,52,44,0.12)" stroke-width="1"/>
+        </pattern>
         <filter id="soft-drop" x="-10%" y="-10%" width="120%" height="130%">
           <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#1D1C1A" flood-opacity="0.14"/>
         </filter>
@@ -295,7 +305,9 @@
           .p-detail { fill: url(#detail-grad); stroke: ${detailStroke}; stroke-width: 1.2; stroke-linejoin: round; }
           .p-detail-solid { fill: ${detailHex}; stroke: ${detailStroke}; stroke-width: 1.2; stroke-linejoin: round; }
           .p-detail-dark { fill: ${detailDark}; stroke: ${detailStroke}; stroke-width: 1.1; stroke-linejoin: round; }
-          .p-seam { stroke: ${primaryStroke}; stroke-width: 1.1; stroke-dasharray: 4 3; fill: none; opacity: 0.65; }
+          .p-bedding { fill: url(#mat-bedding); stroke: ${detailStroke}; stroke-width: 1.1; stroke-linejoin: round; }
+          .p-throw { fill: url(#mat-bedding-throw); stroke: ${detailStroke}; stroke-width: 1.1; stroke-linejoin: round; }
+          .p-seam { stroke: ${primaryStroke}; stroke-width: 1.1; stroke-dasharray: 4 3; fill: none; opacity: 0.55; }
           .dim-line { stroke: #8A847B; stroke-width: 1; stroke-dasharray: 4 4; }
           .dim-tick { stroke: #8A847B; stroke-width: 1.2; }
           .dim-text { font-family: "Plus Jakarta Sans", sans-serif; font-size: 12px; font-weight: 500; fill: #6F6960; }
@@ -522,33 +534,31 @@
           <polygon class="p-detail-dark" points="734,408 752,408 760,468 745,468"/>
           <polygon class="p-detail" points="142,415 164,415 150,484 132,484"/>
           <polygon class="p-detail" points="756,415 778,415 788,484 770,484"/>
-          <rect class="p-detail" x="142" y="400" width="636" height="18" rx="5"/>
+          <rect class="p-detail" x="142" y="400" width="636" height="16" rx="6"/>
 
-          <!-- Respaldo amplio -->
-          <rect class="p-main" x="146" y="190" width="628" height="175" rx="22"/>
-          <rect class="p-sheen" x="146" y="190" width="628" height="175" rx="22"/>
+          <!-- Respaldo amplio curvo -->
+          <path class="p-main" d="M146,232 C146,198 172,186 212,186 L708,186 C748,186 774,198 774,232 L774,365 L146,365 Z"/>
+          <path class="p-sheen" d="M146,232 C146,198 172,186 212,186 L708,186 C748,186 774,198 774,232 L774,365 L146,365 Z"/>
 
-          <!-- Tres cojines de respaldo -->
-          <rect class="p-main" x="172" y="210" width="186" height="132" rx="16"/>
-          <rect class="p-main" x="367" y="210" width="186" height="132" rx="16"/>
-          <rect class="p-main" x="562" y="210" width="186" height="132" rx="16"/>
+          <!-- Tres cojines de respaldo abombados -->
+          <path class="p-main" d="M174,228 C174,206 356,206 356,228 L358,328 C358,344 172,344 172,328 Z"/>
+          <path class="p-main" d="M368,228 C368,206 552,206 552,228 L554,328 C554,344 366,344 366,328 Z"/>
+          <path class="p-main" d="M564,228 C564,206 746,206 746,228 L748,328 C748,344 562,344 562,328 Z"/>
 
-          <!-- Brazos laterales -->
-          <rect class="p-side" x="122" y="264" width="56" height="142" rx="16"/>
-          <rect class="p-main" x="126" y="268" width="48" height="134" rx="14"/>
-          <rect class="p-side" x="742" y="264" width="56" height="142" rx="16"/>
-          <rect class="p-main" x="746" y="268" width="48" height="134" rx="14"/>
+          <!-- Brazos laterales mullidos redondeados -->
+          <path class="p-side" d="M122,282 C122,258 178,258 178,282 L178,396 C178,406 122,406 122,396 Z"/>
+          <path class="p-main" d="M126,284 C126,264 174,264 174,284 L174,392 C174,400 126,400 126,392 Z"/>
+          <path class="p-side" d="M742,282 C742,258 798,258 798,282 L798,396 C798,406 742,406 742,396 Z"/>
+          <path class="p-main" d="M746,284 C746,264 794,264 794,284 L794,392 C794,400 746,400 746,392 Z"/>
 
-          <!-- Cojines de asiento -->
-          <rect class="p-side" x="166" y="330" width="588" height="72" rx="14"/>
-          <rect class="p-main" x="172" y="316" width="188" height="72" rx="14"/>
-          <rect class="p-main" x="366" y="316" width="188" height="72" rx="14"/>
-          <rect class="p-main" x="560" y="316" width="188" height="72" rx="14"/>
-          <path class="p-seam" d="M188,332 L344,332 M382,332 L538,332 M576,332 L732,332"/>
-
-          <!-- Detalles de ribete -->
-          <rect class="p-detail" x="146" y="284" width="6" height="92" rx="3" opacity="0.6"/>
-          <rect class="p-detail" x="768" y="284" width="6" height="92" rx="3" opacity="0.6"/>
+          <!-- Cojines de asiento con corona curva -->
+          <rect class="p-side" x="166" y="336" width="588" height="66" rx="20"/>
+          <path class="p-main" d="M172,330 C210,312 320,312 358,330 L358,376 C358,388 172,388 172,376 Z"/>
+          <path class="p-main" d="M366,330 C404,312 516,312 554,330 L554,376 C554,388 366,388 366,376 Z"/>
+          <path class="p-main" d="M562,330 C600,312 710,312 748,330 L748,376 C748,388 562,388 562,376 Z"/>
+          <path class="p-sheen" d="M172,330 C210,312 320,312 358,330 L358,376 C358,388 172,388 172,376 Z"/>
+          <path class="p-sheen" d="M366,330 C404,312 516,312 554,330 L554,376 C554,388 366,388 366,376 Z"/>
+          <path class="p-sheen" d="M562,330 C600,312 710,312 748,330 L748,376 C748,388 562,388 562,376 Z"/>
           ${isGlass ? `<path d="M250,240 L310,300 M440,240 L500,300" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
         </g>
       `;
@@ -579,26 +589,30 @@
       return `
         <ellipse cx="460" cy="492" rx="310" ry="24" fill="url(#floor-shadow)"/>
         <g filter="url(#soft-drop)">
-          <!-- Patas -->
-          <rect class="p-detail" x="218" y="425" width="18" height="62" rx="3"/>
-          <rect class="p-detail" x="684" y="425" width="18" height="62" rx="3"/>
+          <!-- Patas cónicas -->
+          <polygon class="p-detail" points="214,424 236,424 232,488 218,488"/>
+          <polygon class="p-detail" points="684,424 706,424 702,488 688,488"/>
 
-          <!-- Cabecero arquitectónico -->
-          <rect class="p-side" x="200" y="140" width="520" height="210" rx="14"/>
-          <rect class="p-main" x="210" y="148" width="500" height="196" rx="10"/>
-          <rect class="p-sheen" x="210" y="148" width="500" height="196" rx="10"/>
-          <line class="p-seam" x1="460" y1="158" x2="460" y2="310"/>
+          <!-- Cabecero arquitectónico con panel tapizado suave -->
+          <rect class="p-side" x="198" y="138" width="524" height="218" rx="16"/>
+          <rect class="p-main" x="208" y="146" width="504" height="202" rx="12"/>
+          <rect class="p-throw" x="228" y="166" width="464" height="142" rx="16"/>
+          <path class="p-seam" d="M460,174 L460,300"/>
 
-          <!-- Colchón y ropa de cama (usa detalle para textiles/contraste) -->
-          <rect class="p-detail" x="228" y="294" width="464" height="84" rx="12"/>
-          <!-- Almohadas -->
-          <rect class="p-detail" x="256" y="256" width="182" height="54" rx="14"/>
-          <rect class="p-detail" x="482" y="256" width="182" height="54" rx="14"/>
-          <rect class="p-main" x="220" y="340" width="480" height="44" rx="8" opacity="0.88"/>
+          <!-- Colchón textil mullido con bordes suaves -->
+          <path class="p-bedding" d="M222,312 C222,292 246,284 460,284 C674,284 698,292 698,312 L698,376 C698,386 222,386 222,376 Z"/>
+
+          <!-- Almohadas esponjosas abombadas -->
+          <path class="p-bedding" d="M252,272 C252,250 436,250 436,272 L434,302 C434,316 254,316 254,302 Z"/>
+          <path class="p-bedding" d="M484,272 C484,250 668,250 668,272 L666,302 C666,316 486,316 486,302 Z"/>
+
+          <!-- Edredón / manta doblada suave sobre el colchón -->
+          <path class="p-throw" d="M216,326 C216,314 704,314 704,326 L704,372 C704,386 216,386 216,372 Z"/>
+          <path class="p-seam" d="M236,336 Q460,344 684,336"/>
 
           <!-- Bastidor inferior principal -->
-          <rect class="p-side" x="196" y="376" width="528" height="56" rx="6"/>
-          <rect class="p-main" x="202" y="382" width="516" height="44" rx="4"/>
+          <rect class="p-side" x="196" y="376" width="528" height="54" rx="7"/>
+          <rect class="p-main" x="202" y="382" width="516" height="42" rx="5"/>
           ${isGlass ? `<path d="M280,175 L350,250 M540,175 L610,250" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
         </g>
       `;

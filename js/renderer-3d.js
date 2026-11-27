@@ -266,11 +266,119 @@
             ],
             edges: [j === 0, i === stepsU - 1, j === stepsV - 1, i === 0],
             role,
+            soft: Boolean(opts.soft),
             isTop: qIdx === 0
           });
         }
       }
     });
+  }
+
+  /**
+   * Añade un volumen acolchado/redondeado (cojín, colchón, almohada o brazo tapizado)
+   * con perfil abombado en los costados, hombros biselados y corona curva suave.
+   */
+  function addCushion(faces, cx, yBottom, cz, w, h, d, role, opts = {}) {
+    const hw = w / 2;
+    const hd = d / 2;
+    const bevel = Math.min(hw * 0.28, hd * 0.28, h * (opts.bevelRatio ?? 0.32));
+    const bellyInsetBot = bevel * 0.45;
+    const shoulderInset = bevel * 0.72;
+    const crown = opts.crown ?? Math.min(h * 0.22, 3.8);
+    const tiltBackZ = opts.tiltBackZ || 0; // inclinación superior hacia atrás (-Z)
+
+    const nx = opts.nx || 4;
+    const nz = opts.nz || 4;
+
+    const ringPoint = (u, v, y, inset, zOffset = 0) => {
+      const rx = (hw - inset);
+      const rz = (hd - inset);
+      return {
+        x: cx + (u * 2 - 1) * rx,
+        y,
+        z: cz + zOffset + (v * 2 - 1) * rz
+      };
+    };
+
+    // 1. Tapa superior abombada suave (malla nx x nz)
+    const topGrid = [];
+    for (let i = 0; i <= nx; i++) {
+      topGrid[i] = [];
+      const u = i / nx;
+      for (let j = 0; j <= nz; j++) {
+        const v = j / nz;
+        const bulge = Math.sin(u * Math.PI) * Math.sin(v * Math.PI) * crown;
+        const pt = ringPoint(u, v, yBottom + h + bulge, shoulderInset, tiltBackZ);
+        topGrid[i][j] = pt;
+      }
+    }
+
+    for (let i = 0; i < nx; i++) {
+      for (let j = 0; j < nz; j++) {
+        const u0 = i / nx;
+        const u1 = (i + 1) / nx;
+        const v0 = j / nz;
+        const v1 = (j + 1) / nz;
+        // Orden CCW visto desde arriba (+Y): (u0,v1) -> (u1,v1) -> (u1,v0) -> (u0,v0)
+        faces.push({
+          pts: [topGrid[i][j + 1], topGrid[i + 1][j + 1], topGrid[i + 1][j], topGrid[i][j]],
+          uv: [
+            [u0 * TEX_SIZE, v1 * TEX_SIZE],
+            [u1 * TEX_SIZE, v1 * TEX_SIZE],
+            [u1 * TEX_SIZE, v0 * TEX_SIZE],
+            [u0 * TEX_SIZE, v0 * TEX_SIZE]
+          ],
+          edges: [false, false, false, false],
+          role,
+          soft: true,
+          isTop: true
+        });
+      }
+    }
+
+    // 2. Anillos perimetrales (costados abombados y chaflán superior)
+    // Orden perimetral CCW desde arriba: front(+Z), right(+X), back(-Z), left(-X)
+    const perimeterUVs = [];
+    for (let i = 0; i < nx; i++) perimeterUVs.push([i / nx, 1]);
+    for (let j = nz; j > 0; j--) perimeterUVs.push([1, j / nz]);
+    for (let i = nx; i > 0; i--) perimeterUVs.push([i / nx, 0]);
+    for (let j = 0; j < nz; j++) perimeterUVs.push([0, j / nz]);
+
+    const yBot = yBottom;
+    const yMid = yBottom + h * 0.46;
+    const yTop = yBottom + h;
+
+    const ringBot = perimeterUVs.map(([u, v]) => ringPoint(u, v, yBot, bellyInsetBot, tiltBackZ * 0.1));
+    const ringMid = perimeterUVs.map(([u, v]) => ringPoint(u, v, yMid, 0, tiltBackZ * 0.5));
+    const ringTop = perimeterUVs.map(([u, v]) => {
+      const bulge = Math.sin(u * Math.PI) * Math.sin(v * Math.PI) * crown;
+      return ringPoint(u, v, yTop + bulge, shoulderInset, tiltBackZ);
+    });
+
+    const addBand = (lowerRing, upperRing, vLow, vHigh, drawBottomEdge) => {
+      const len = lowerRing.length;
+      for (let k = 0; k < len; k++) {
+        const next = (k + 1) % len;
+        const t0 = k / len;
+        const t1 = (k + 1) / len;
+        faces.push({
+          pts: [lowerRing[k], lowerRing[next], upperRing[next], upperRing[k]],
+          uv: [
+            [t0 * TEX_SIZE, vLow * TEX_SIZE],
+            [t1 * TEX_SIZE, vLow * TEX_SIZE],
+            [t1 * TEX_SIZE, vHigh * TEX_SIZE],
+            [t0 * TEX_SIZE, vHigh * TEX_SIZE]
+          ],
+          edges: [drawBottomEdge, false, false, false],
+          role,
+          soft: true,
+          isTop: false
+        });
+      }
+    };
+
+    addBand(ringBot, ringMid, 0.55, 1.0, true);
+    addBand(ringMid, ringTop, 0.0, 0.55, false);
   }
 
   function buildFurnitureMesh(id) {
@@ -361,48 +469,44 @@
     }
 
     if (id === "sillon") {
-      // Base y patas
-      addBox(faces, 0, 16, 0, 76, 5, 78, "detail");
-      [[-33, 33], [33, 33], [-33, -33], [33, -33]].forEach(([x, z]) => {
-        addBox(faces, x, 0, z, 5.5, 16, 5.5, "detail", { taperBottom: 0.7 });
+      // Base estructural y patas nórdicas
+      addBox(faces, 0, 15, 0, 84, 4.5, 80, "detail");
+      [[-35, 33], [35, 33], [-35, -33], [35, -33]].forEach(([x, z]) => {
+        addBox(faces, x, 0, z, 5.5, 15, 5.5, "detail", { taperBottom: 0.7 });
       });
-      // Asiento y cojín
-      addBox(faces, 0, 21, 3, 62, 18, 68, "main", { subdivide: 2 });
-      addBox(faces, 0, 37, 5, 58, 10, 62, "main", { subdivide: 2 });
-      // Respaldo y cojín lumbar
-      addBox(faces, 0, 21, -33, 78, 57, 14, "main", { subdivide: 2 });
-      addBox(faces, 0, 44, -22, 56, 30, 12, "main", { subdivide: 2 });
-      // Brazos laterales
-      addBox(faces, -35, 21, 0, 12, 38, 76, "main", { subdivide: 2 });
-      addBox(faces, 35, 21, 0, 12, 38, 76, "main", { subdivide: 2 });
-      // Ribete detalle en brazos
-      addBox(faces, -35, 59, 0, 4, 2, 64, "detail");
-      addBox(faces, 35, 59, 0, 4, 2, 64, "detail");
-      return { faces, bounds: { w: 82, h: 78, d: 84 } };
+      // Casco tapizado de asiento (sin invadir brazos ni cojín superior)
+      addCushion(faces, 0, 20, 4, 56, 13, 66, "main", { bevelRatio: 0.16, crown: 0, nx: 3, nz: 3 });
+      // Cojín mullido de asiento encima del casco
+      addCushion(faces, 0, 33.5, 6, 54, 13, 60, "main", { bevelRatio: 0.34, crown: 2.8, nx: 4, nz: 4 });
+      // Respaldo entre los brazos y cojín lumbar delante del respaldo
+      addCushion(faces, 0, 20, -35, 56, 56, 13, "main", { bevelRatio: 0.22, crown: 1.2, tiltBackZ: -3, nx: 3, nz: 2 });
+      addCushion(faces, 0, 47, -21, 52, 26, 12, "main", { bevelRatio: 0.35, crown: 2.8, tiltBackZ: -3, nx: 3, nz: 2 });
+      // Brazos laterales redondeados exteriores (sin solapar respaldo ni asiento)
+      addCushion(faces, -36, 20, -2, 14, 38, 80, "main", { bevelRatio: 0.32, crown: 2.0, nx: 2, nz: 4 });
+      addCushion(faces, 36, 20, -2, 14, 38, 80, "main", { bevelRatio: 0.32, crown: 2.0, nx: 2, nz: 4 });
+      return { faces, bounds: { w: 86, h: 78, d: 84 } };
     }
 
     if (id === "sofa") {
-      // Base y patas
-      addBox(faces, 0, 14, 0, 220, 5, 86, "detail");
-      [[-102, 36], [102, 36], [-102, -36], [102, -36], [0, 36], [0, -36]].forEach(([x, z]) => {
+      // Base estructural de madera/metal y 6 patas
+      addBox(faces, 0, 14, -1, 224, 4.5, 86, "detail");
+      [[-104, 36], [104, 36], [-104, -36], [104, -36], [0, 36], [0, -36]].forEach(([x, z]) => {
         addBox(faces, x, 0, z, 6, 14, 6, "detail", { taperBottom: 0.72 });
       });
-      // Estructura base tapizada
-      addBox(faces, 0, 19, 2, 204, 16, 82, "main", { subdivide: 2 });
-      // 3 cojines de asiento
-      [-67, 0, 67].forEach((x) => {
-        addBox(faces, x, 35, 6, 65, 12, 72, "main", { subdivide: 2 });
+      // Base tapizada inferior entre brazos
+      addCushion(faces, 0, 19, 4, 196, 14, 76, "main", { bevelRatio: 0.16, crown: 0, nx: 5, nz: 3 });
+      // 3 cojines mullidos de asiento encima de la base
+      [-65, 0, 65].forEach((x) => {
+        addCushion(faces, x, 33.5, 7, 63, 13, 68, "main", { bevelRatio: 0.34, crown: 2.8, nx: 3, nz: 4 });
       });
-      // Respaldo y 3 cojines lumbares
-      addBox(faces, 0, 19, -38, 224, 57, 15, "main", { subdivide: 2 });
-      [-67, 0, 67].forEach((x) => {
-        addBox(faces, x, 43, -24, 64, 30, 14, "main", { subdivide: 2 });
+      // Respaldo amplio entre brazos y 3 cojines lumbares encima de los asientos
+      addCushion(faces, 0, 19, -38, 196, 57, 14, "main", { bevelRatio: 0.22, crown: 1.2, tiltBackZ: -3, nx: 5, nz: 2 });
+      [-65, 0, 65].forEach((x) => {
+        addCushion(faces, x, 47, -22, 62, 27, 12, "main", { bevelRatio: 0.36, crown: 2.8, tiltBackZ: -3, nx: 3, nz: 2 });
       });
-      // Brazos
-      addBox(faces, -108, 19, 0, 14, 38, 88, "main", { subdivide: 2 });
-      addBox(faces, 108, 19, 0, 14, 38, 88, "main", { subdivide: 2 });
-      addBox(faces, -108, 57, 0, 4, 2, 74, "detail");
-      addBox(faces, 108, 57, 0, 4, 2, 74, "detail");
+      // Brazos laterales redondeados exteriores
+      addCushion(faces, -106, 19, -2, 15, 39, 88, "main", { bevelRatio: 0.34, crown: 2.0, nx: 2, nz: 4 });
+      addCushion(faces, 106, 19, -2, 15, 39, 88, "main", { bevelRatio: 0.34, crown: 2.0, nx: 2, nz: 4 });
       return { faces, bounds: { w: 230, h: 76, d: 94 } };
     }
 
@@ -419,21 +523,25 @@
     }
 
     if (id === "cama") {
-      // Bastidor principal
-      addBox(faces, 0, 16, 4, 180, 18, 202, "main", { subdivide: 3 });
-      // 4 patas
-      [[-82, 98], [82, 98], [-82, -92], [82, -92]].forEach(([x, z]) => {
+      // Bastidor principal de madera/material estructural
+      addBox(faces, 0, 16, 4, 180, 16, 200, "main", { subdivide: 3 });
+      // 4 patas cónicas
+      [[-82, 96], [82, 96], [-82, -90], [82, -90]].forEach(([x, z]) => {
         addBox(faces, x, 0, z, 7, 16, 7, "detail", { taperBottom: 0.75 });
       });
-      // Cabecero alto
-      addBox(faces, 0, 16, -98, 182, 89, 10, "main", { subdivide: 3 });
-      // Colchón (tono detalle para contraste elegante)
-      addBox(faces, 0, 34, 8, 166, 20, 188, "detail", { subdivide: 3 });
-      // Cubrecama parcial claramente por encima del colchón
-      addBox(faces, 0, 54, 48, 170, 5, 110, "main", { subdivide: 2 });
-      // 2 almohadas
-      addBox(faces, -42, 54, -72, 68, 12, 38, "detail", { subdivide: 1 });
-      addBox(faces, 42, 54, -72, 68, 12, 38, "detail", { subdivide: 1 });
+      // Cabecero enmarcado nórdico sin solapamiento (bastidor inferior, larguero superior, montantes y panel central)
+      addBox(faces, 0, 16, -100, 182, 34, 8, "main", { subdivide: 3 });      // parte baja cabecero (y=16..50)
+      addBox(faces, 0, 96, -100, 182, 9, 8, "main", { subdivide: 3 });       // copete superior (y=96..105)
+      addBox(faces, -84, 50, -100, 14, 46, 8, "main", { subdivide: 2 });    // montante izquierdo
+      addBox(faces, 84, 50, -100, 14, 46, 8, "main", { subdivide: 2 });     // montante derecho
+      addCushion(faces, 0, 50, -100, 154, 46, 7, "bedding-throw", { bevelRatio: 0.22, crown: 1.0, nx: 4, nz: 2 });
+      // Colchón mullido textil (encima del bastidor)
+      addCushion(faces, 0, 32.5, 6, 166, 19.5, 184, "bedding", { bevelRatio: 0.20, crown: 1.4, nx: 5, nz: 5 });
+      // Edredón / manta doblada claramente encima del colchón
+      addCushion(faces, 0, 53.8, 46, 170, 7.5, 112, "bedding-throw", { bevelRatio: 0.34, crown: 2.2, nx: 4, nz: 4 });
+      // 2 almohadas esponjosas abombadas encima del colchón
+      addCushion(faces, -41, 53.8, -66, 66, 10, 34, "bedding", { bevelRatio: 0.40, crown: 3.4, nx: 4, nz: 3 });
+      addCushion(faces, 41, 53.8, -66, 66, 10, 34, "bedding", { bevelRatio: 0.40, crown: 3.4, nx: 4, nz: 3 });
       return { faces, bounds: { w: 180, h: 105, d: 210 } };
     }
 
@@ -744,6 +852,12 @@
       const detailTexType = material.categoryId === "metales" ? material.textureType : "metal-matte";
       const detailTex = createTextureCanvas(detailColor, detailTexType);
 
+      const beddingTex = createTextureCanvas(detailColor, "textile-linen");
+      const throwTone = material.categoryId === "textiles"
+        ? primaryColor
+        : shadeHex(detailColor, getLuminance(detailColor) > 0.7 ? -0.11 : 0.18);
+      const throwTex = createTextureCanvas(throwTone, "textile-boucle");
+
       const strokeMain = shadeHex(primaryColor, getLuminance(primaryColor) < 0.35 ? 0.25 : -0.32);
       const strokeDetail = shadeHex(detailColor, getLuminance(detailColor) < 0.35 ? 0.25 : -0.32);
 
@@ -782,6 +896,7 @@
           uv: f.uv,
           edges: f.edges || [true, true, true, true],
           role: f.role,
+          soft: Boolean(f.soft),
           isGlassFace,
           avgZ,
           nDotL
@@ -823,11 +938,15 @@
           continue;
         }
 
-        const tex = pf.role === "detail" ? detailTex : mainTex;
+        let tex = mainTex;
+        if (pf.role === "detail") tex = detailTex;
+        else if (pf.role === "bedding") tex = beddingTex;
+        else if (pf.role === "bedding-throw") tex = throwTex;
+
         drawTexturedTriangle(ctx, tex, p0, p1, p2, uv0, uv1, uv2);
         drawTexturedTriangle(ctx, tex, p0, p2, p3, uv0, uv2, uv3);
 
-        // Sombreado direccional
+        // Sombreado direccional suave (más envolvente en cojines y colchones)
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(p0.sx, p0.sy);
@@ -836,19 +955,19 @@
         ctx.lineTo(p3.sx, p3.sy);
         ctx.closePath();
 
-        if (pf.nDotL > 0.15) {
-          const lift = (pf.nDotL - 0.15) * 0.16;
+        if (pf.nDotL > 0.12) {
+          const lift = (pf.nDotL - 0.12) * (pf.soft ? 0.20 : 0.16);
           ctx.fillStyle = `rgba(255, 252, 245, ${lift.toFixed(3)})`;
           ctx.fill();
         } else {
-          const dim = clamp((0.15 - pf.nDotL) * 0.28, 0.04, 0.36);
+          const dim = clamp((0.12 - pf.nDotL) * (pf.soft ? 0.24 : 0.28), 0.03, 0.34);
           ctx.fillStyle = `rgba(20, 18, 15, ${dim.toFixed(3)})`;
           ctx.fill();
         }
 
-        ctx.strokeStyle = pf.role === "detail" ? strokeDetail : strokeMain;
-        ctx.globalAlpha = 0.42;
-        ctx.lineWidth = 0.9;
+        ctx.strokeStyle = (pf.role === "detail" || pf.role === "bedding" || pf.role === "bedding-throw") ? strokeDetail : strokeMain;
+        ctx.globalAlpha = pf.soft ? 0.16 : 0.42;
+        ctx.lineWidth = pf.soft ? 0.7 : 0.9;
         const pts = pf.tp;
         for (let eIdx = 0; eIdx < 4; eIdx++) {
           if (!pf.edges[eIdx]) continue;
