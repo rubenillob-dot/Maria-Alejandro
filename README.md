@@ -9,8 +9,8 @@ Página web corporativa e interactiva para **Creamuebles**, una firma de diseño
 - **Estética nórdica y contemporánea (*desktop-first*):** Paleta de tonos neutros cálidos (`#F7F5F0`, `#EFECE4`, `#1D1C1A`, acentos madera `#9F754B`), tipografía editorial (**Playfair Display** + **Plus Jakarta Sans**), menú superior fijo y diseño adaptable a tableta y móvil.
 - **Inicio y Filosofía:** Portada visual de mobiliario minimalista con acceso directo al configurador y pilares de diseño a medida (*Proporción & Calma*, *Materia Honesta*, *Hecho Bajo Pedido*).
 - **Configurador Interactivo en Tiempo Real (`Diseña tu Mueble`):**
-  - Vista previa vectorial **SVG** en tiempo real con iluminación de estudio, cotas arquitectónicas opcionales y transiciones suaves.
-  - **6 tipologías de muebles:** Mesa de comedor, Silla minimalista, Estantería modular, Aparador, Escritorio y Sillón.
+  - Conmutador fluido entre **Vista 2D (SVG arquitectónico)** y **Vista 3D interactiva (Canvas orbital 360°)** con rotación libre al arrastrar, rotación automática, zoom, restablecimiento de cámara, iluminación de estudio y cotas opcionales.
+  - **12 tipologías de muebles:** Mesa de comedor, Silla minimalista, Estantería modular, Aparador, Escritorio, Sillón, Sofá 3 plazas, Mesa de centro, Cama con cabecero, Mesita de noche, Banco recibidor y Vitrina alta.
   - **22 materiales en 5 categorías** con representación visual de textura (vetas de madera, vetas de mármol, estratos de travertino, moteado de granito, cepillado metálico, trama textil, bouclé, terciopelo, cuero y transparencia de cristales):
     - *Maderas:* Roble natural, Nogal americano, Haya, Fresno, Pino nórdico, Bambú.
     - *Piedras y Cerámicos:* Mármol blanco Carrara, Mármol negro Marquina, Travertino, Granito, Porcelánico.
@@ -32,8 +32,9 @@ Página web corporativa e interactiva para **Creamuebles**, una firma de diseño
 │   └── styles.css          # Sistema de diseño, tema nórdico, layout y responsive
 ├── js/
 │   ├── data.js             # Catálogo de muebles, materiales, categorías y colores
-│   ├── svg-renderer.js     # Motor SVG interactivo con texturas y acabados dinámicos
-│   └── app.js              # Lógica del configurador, navegación, scroll reveal y formulario
+│   ├── svg-renderer.js     # Motor SVG 2D con texturas y acabados dinámicos
+│   ├── renderer-3d.js      # Motor 3D en Canvas con cámara orbital y texturas en perspectiva
+│   └── app.js              # Lógica del configurador, cambio 2D/3D, navegación y formulario
 ├── assets/
 │   ├── hero-living.jpg     # Fotografía principal de salón nórdico
 │   ├── atelier-craft.jpg   # Fotografía del taller y muestras de material

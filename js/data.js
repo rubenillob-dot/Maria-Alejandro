@@ -1,6 +1,6 @@
 /**
  * Catálogo de datos del configurador Creamuebles:
- * - 6 tipologías de mobiliario
+ * - 12 tipologías de mobiliario nórdico y contemporáneo
  * - 5 categorías de material (22 materiales totales)
  * - 10 colores curados de inspiración nórdica/contemporánea
  */
@@ -85,6 +85,86 @@ window.CREAMUEBLES_DATA = {
         <path d="M8 14V9a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v5"/>
         <path d="M5 15a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v5h12v-5a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v6H5v-6z"/>
         <path d="M8 21v5M24 21v5"/>
+      </svg>`
+    },
+    {
+      id: "sofa",
+      name: "Sofá 3 plazas",
+      dimensions: "230 × 94 × 76 cm",
+      basePrice: 2150,
+      defaultMaterial: "lino-natural",
+      defaultPrimaryColor: "#D8CBB8",
+      defaultDetailColor: "#7A4E2D",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 15V10a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/>
+        <path d="M4 15h24v7H4z"/>
+        <path d="M16 15v7M7 22v4M25 22v4"/>
+      </svg>`
+    },
+    {
+      id: "mesa-centro",
+      name: "Mesa de centro",
+      dimensions: "120 × 70 × 38 cm",
+      basePrice: 640,
+      defaultMaterial: "travertino",
+      defaultPrimaryColor: "#D8CBB8",
+      defaultDetailColor: "#3A3C3E",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="14" width="24" height="3.5" rx="1"/>
+        <path d="M8 17.5V24M24 17.5V24M10 21h12"/>
+      </svg>`
+    },
+    {
+      id: "cama",
+      name: "Cama con cabecero",
+      dimensions: "180 × 210 × 105 cm",
+      basePrice: 1890,
+      defaultMaterial: "roble-natural",
+      defaultPrimaryColor: "#C69C6D",
+      defaultDetailColor: "#F5F2EB",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 9v17M27 14v12M5 10h22v7H5z"/>
+        <path d="M5 17h22v5H5z"/>
+        <path d="M8 13h6v3H8zM18 13h6v3h-6z"/>
+      </svg>`
+    },
+    {
+      id: "mesita",
+      name: "Mesita de noche",
+      dimensions: "52 × 42 × 54 cm",
+      basePrice: 420,
+      defaultMaterial: "nogal-americano",
+      defaultPrimaryColor: "#7A4E2D",
+      defaultDetailColor: "#C5A059",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="8" width="16" height="13" rx="1"/>
+        <path d="M8 14.5h16M14 11.2h4M14 17.8h4M10 21v5M22 21v5"/>
+      </svg>`
+    },
+    {
+      id: "banco",
+      name: "Banco recibidor",
+      dimensions: "140 × 40 × 45 cm",
+      basePrice: 540,
+      defaultMaterial: "fresno",
+      defaultPrimaryColor: "#DEC7A8",
+      defaultDetailColor: "#1E1E1E",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="13" width="24" height="4" rx="1"/>
+        <path d="M7 17l-1 8M25 17l1 8M8 21h16"/>
+      </svg>`
+    },
+    {
+      id: "vitrina",
+      name: "Vitrina alta",
+      dimensions: "100 × 42 × 185 cm",
+      basePrice: 1620,
+      defaultMaterial: "roble-natural",
+      defaultPrimaryColor: "#3A3C3E",
+      defaultDetailColor: "#C5A059",
+      icon: `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="4" width="16" height="21" rx="1"/>
+        <path d="M16 4v15M8 19h16M10 25v3M22 25v3"/>
       </svg>`
     }
   ],

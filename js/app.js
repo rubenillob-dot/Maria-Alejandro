@@ -1,7 +1,7 @@
 /**
  * Controlador principal de Creamuebles:
- * - Estado del configurador en tiempo real
- * - Renderizado de controles (muebles, categorías, materiales, colores, custom picker)
+ * - Estado del configurador en tiempo real (12 muebles, 22 materiales, 10 colores + HEX)
+ * - Conmutación fluida entre Vista 2D (SVG arquitectónico) y Vista 3D (Canvas orbital)
  * - Cálculo dinámico de precio orientativo y ficha resumen
  * - Conexión automática con el formulario de Contacto
  * - Navegación fija, menú móvil y animaciones scroll-reveal
@@ -19,8 +19,12 @@
     detailColor: "#1E1E1E",
     activeColorTarget: "primary", // "primary" | "detail"
     syncColors: false,
-    showGrid: true
+    showGrid: true,
+    viewMode: "2d", // "2d" | "3d"
+    autoRotate: false
   };
+
+  let renderer3D = null;
 
   // Referencias DOM
   const els = {
@@ -31,6 +35,14 @@
 
     svgViewport: document.getElementById("svg-viewport"),
     furnitureSvg: document.getElementById("furniture-svg"),
+    canvas3D: document.getElementById("furniture-3d-canvas"),
+    hud3D: document.getElementById("hud-3d"),
+    viewModeBtns: document.querySelectorAll("[data-view-mode]"),
+    autoRotateBtn: document.getElementById("auto-rotate-btn"),
+    zoomInBtn: document.getElementById("zoom-in-btn"),
+    zoomOutBtn: document.getElementById("zoom-out-btn"),
+    resetCameraBtn: document.getElementById("reset-camera-btn"),
+
     stageBadge: document.getElementById("stage-category-badge"),
     stageDimensions: document.getElementById("stage-dimensions"),
     stageMaterialSwatch: document.getElementById("stage-material-swatch"),
@@ -195,6 +207,43 @@
         : "Aplicando a detalles y patas";
   }
 
+  function renderActiveViewport(renderArgs) {
+    if (state.viewMode === "3d" && renderer3D) {
+      renderer3D.setState(renderArgs);
+    } else if (window.renderFurnitureSVG) {
+      window.renderFurnitureSVG(els.furnitureSvg, renderArgs);
+    }
+  }
+
+  function setViewMode(mode) {
+    if (mode === state.viewMode) return;
+    state.viewMode = mode;
+
+    els.viewModeBtns.forEach((btn) => {
+      const isActive = btn.dataset.viewMode === mode;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
+
+    els.svgViewport.classList.add("is-switching");
+    window.setTimeout(() => {
+      const is3D = mode === "3d";
+      els.furnitureSvg.classList.toggle("hidden", is3D);
+      els.canvas3D.classList.toggle("hidden", !is3D);
+      els.hud3D.classList.toggle("hidden", !is3D);
+      els.autoRotateBtn.classList.toggle("hidden", !is3D);
+
+      if (!is3D && renderer3D) {
+        state.autoRotate = false;
+        renderer3D.setAutoRotate(false);
+        els.autoRotateBtn.setAttribute("aria-pressed", "false");
+      }
+
+      updateStageAndSummary(false);
+      els.svgViewport.classList.remove("is-switching");
+    }, 150);
+  }
+
   function updateStageAndSummary(withSwitchAnimation = false) {
     const furniture = getSelectedFurniture();
     const material = getSelectedMaterial();
@@ -225,7 +274,6 @@
     els.summaryDetailSwatch.style.backgroundColor = state.detailColor;
     els.summaryDetailText.textContent = findColorName(state.detailColor);
 
-    // Renderizar SVG con transición suave al cambiar de mueble
     const renderArgs = {
       furniture,
       material,
@@ -237,11 +285,11 @@
     if (withSwitchAnimation) {
       els.svgViewport.classList.add("is-switching");
       window.setTimeout(() => {
-        window.renderFurnitureSVG(els.furnitureSvg, renderArgs);
+        renderActiveViewport(renderArgs);
         els.svgViewport.classList.remove("is-switching");
       }, 150);
     } else {
-      window.renderFurnitureSVG(els.furnitureSvg, renderArgs);
+      renderActiveViewport(renderArgs);
     }
   }
 
@@ -263,6 +311,38 @@
      EVENTOS DEL CONFIGURADOR
      ======================================================================== */
   function bindConfiguratorEvents() {
+    // Conmutar vista 2D / 3D
+    els.viewModeBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        setViewMode(btn.dataset.viewMode);
+      });
+    });
+
+    // Controles específicos de cámara 3D
+    els.autoRotateBtn.addEventListener("click", () => {
+      state.autoRotate = !state.autoRotate;
+      els.autoRotateBtn.setAttribute("aria-pressed", String(state.autoRotate));
+      if (renderer3D) renderer3D.setAutoRotate(state.autoRotate);
+    });
+
+    els.zoomInBtn.addEventListener("click", () => {
+      if (renderer3D) renderer3D.adjustZoom(0.14);
+    });
+
+    els.zoomOutBtn.addEventListener("click", () => {
+      if (renderer3D) renderer3D.adjustZoom(-0.14);
+    });
+
+    els.resetCameraBtn.addEventListener("click", () => {
+      if (renderer3D) renderer3D.resetCamera();
+    });
+
+    window.addEventListener("resize", () => {
+      if (state.viewMode === "3d" && renderer3D) {
+        renderer3D.render();
+      }
+    });
+
     // Selección de tipo de mueble
     els.furnitureSelector.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-furniture-id]");
@@ -291,7 +371,6 @@
       state.materialId = card.dataset.materialId;
       const mat = getSelectedMaterial();
 
-      // Al elegir un material nuevo, sugerimos su tono natural en la estructura principal
       state.primaryColor = mat.defaultHex.toUpperCase();
       if (state.syncColors) {
         state.detailColor = state.primaryColor;
@@ -368,6 +447,7 @@
       state.detailColor = furniture.defaultDetailColor;
       state.syncColors = false;
       els.syncColorsCheckbox.checked = false;
+      if (renderer3D) renderer3D.resetCamera();
 
       renderMaterialTabs();
       renderMaterialOptions();
@@ -493,7 +573,6 @@
 
   function initScrollReveal() {
     const targets = document.querySelectorAll(".reveal");
-    // Los elementos del hero siempre visibles en el primer pintado
     targets.forEach((el) => {
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight * 1.05) {
@@ -530,7 +609,41 @@
   /* ========================================================================
      INICIALIZACIÓN
      ======================================================================== */
+  function applyUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const mueble = params.get("mueble");
+    if (mueble && DATA.furnitureTypes.some((f) => f.id === mueble)) {
+      const f = DATA.furnitureTypes.find((item) => item.id === mueble);
+      const defaultMat = DATA.materials.find((m) => m.id === f.defaultMaterial) || DATA.materials[0];
+      state.furnitureId = f.id;
+      state.categoryId = defaultMat.categoryId;
+      state.materialId = defaultMat.id;
+      state.primaryColor = f.defaultPrimaryColor;
+      state.detailColor = f.defaultDetailColor;
+    }
+
+    const vista = params.get("vista");
+    const initialMode = vista === "3d" ? "3d" : "2d";
+    state.viewMode = initialMode;
+
+    els.viewModeBtns.forEach((btn) => {
+      const isActive = btn.dataset.viewMode === initialMode;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
+
+    const is3D = initialMode === "3d";
+    els.furnitureSvg.classList.toggle("hidden", is3D);
+    els.canvas3D.classList.toggle("hidden", !is3D);
+    els.hud3D.classList.toggle("hidden", !is3D);
+    els.autoRotateBtn.classList.toggle("hidden", !is3D);
+  }
+
   function init() {
+    if (window.Creamuebles3DRenderer && els.canvas3D) {
+      renderer3D = new window.Creamuebles3DRenderer(els.canvas3D);
+    }
+    applyUrlParams();
     renderFurnitureOptions();
     renderMaterialTabs();
     renderMaterialOptions();

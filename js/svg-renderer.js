@@ -511,6 +511,175 @@
           ${isGlass ? `<path d="M350,200 L420,275 M380,200 L450,275" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
         </g>
       `;
+    },
+
+    sofa(isGlass) {
+      return `
+        <ellipse cx="460" cy="486" rx="330" ry="26" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas nórdicas -->
+          <polygon class="p-detail-dark" points="168,408 186,408 175,468 160,468"/>
+          <polygon class="p-detail-dark" points="734,408 752,408 760,468 745,468"/>
+          <polygon class="p-detail" points="142,415 164,415 150,484 132,484"/>
+          <polygon class="p-detail" points="756,415 778,415 788,484 770,484"/>
+          <rect class="p-detail" x="142" y="400" width="636" height="18" rx="5"/>
+
+          <!-- Respaldo amplio -->
+          <rect class="p-main" x="146" y="190" width="628" height="175" rx="22"/>
+          <rect class="p-sheen" x="146" y="190" width="628" height="175" rx="22"/>
+
+          <!-- Tres cojines de respaldo -->
+          <rect class="p-main" x="172" y="210" width="186" height="132" rx="16"/>
+          <rect class="p-main" x="367" y="210" width="186" height="132" rx="16"/>
+          <rect class="p-main" x="562" y="210" width="186" height="132" rx="16"/>
+
+          <!-- Brazos laterales -->
+          <rect class="p-side" x="122" y="264" width="56" height="142" rx="16"/>
+          <rect class="p-main" x="126" y="268" width="48" height="134" rx="14"/>
+          <rect class="p-side" x="742" y="264" width="56" height="142" rx="16"/>
+          <rect class="p-main" x="746" y="268" width="48" height="134" rx="14"/>
+
+          <!-- Cojines de asiento -->
+          <rect class="p-side" x="166" y="330" width="588" height="72" rx="14"/>
+          <rect class="p-main" x="172" y="316" width="188" height="72" rx="14"/>
+          <rect class="p-main" x="366" y="316" width="188" height="72" rx="14"/>
+          <rect class="p-main" x="560" y="316" width="188" height="72" rx="14"/>
+          <path class="p-seam" d="M188,332 L344,332 M382,332 L538,332 M576,332 L732,332"/>
+
+          <!-- Detalles de ribete -->
+          <rect class="p-detail" x="146" y="284" width="6" height="92" rx="3" opacity="0.6"/>
+          <rect class="p-detail" x="768" y="284" width="6" height="92" rx="3" opacity="0.6"/>
+          ${isGlass ? `<path d="M250,240 L310,300 M440,240 L500,300" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
+    },
+
+    "mesa-centro"(isGlass) {
+      return `
+        <ellipse cx="460" cy="486" rx="250" ry="24" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas bajas escultóricas -->
+          <polygon class="p-detail-dark" points="268,365 286,365 274,462 258,462"/>
+          <polygon class="p-detail-dark" points="634,365 652,365 662,462 646,462"/>
+          <polygon class="p-detail" points="234,376 258,376 244,484 224,484"/>
+          <polygon class="p-detail" points="662,376 686,376 696,484 676,484"/>
+          <!-- Balda inferior revistero -->
+          <polygon class="p-detail" points="248,430 672,430 662,442 258,442"/>
+
+          <!-- Sobre grueso arquitectónico -->
+          <polygon class="p-side" points="196,348 724,348 710,378 210,378"/>
+          <polygon class="p-main" points="262,286 658,286 724,348 196,348"/>
+          <polygon class="p-sheen" points="262,286 658,286 724,348 196,348"/>
+          ${isGlass ? `<path d="M315,296 L390,340 M355,296 L430,340 M540,296 L605,340" stroke="rgba(255,255,255,0.68)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
+    },
+
+    cama(isGlass) {
+      return `
+        <ellipse cx="460" cy="492" rx="310" ry="24" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas -->
+          <rect class="p-detail" x="218" y="425" width="18" height="62" rx="3"/>
+          <rect class="p-detail" x="684" y="425" width="18" height="62" rx="3"/>
+
+          <!-- Cabecero arquitectónico -->
+          <rect class="p-side" x="200" y="140" width="520" height="210" rx="14"/>
+          <rect class="p-main" x="210" y="148" width="500" height="196" rx="10"/>
+          <rect class="p-sheen" x="210" y="148" width="500" height="196" rx="10"/>
+          <line class="p-seam" x1="460" y1="158" x2="460" y2="310"/>
+
+          <!-- Colchón y ropa de cama (usa detalle para textiles/contraste) -->
+          <rect class="p-detail" x="228" y="294" width="464" height="84" rx="12"/>
+          <!-- Almohadas -->
+          <rect class="p-detail" x="256" y="256" width="182" height="54" rx="14"/>
+          <rect class="p-detail" x="482" y="256" width="182" height="54" rx="14"/>
+          <rect class="p-main" x="220" y="340" width="480" height="44" rx="8" opacity="0.88"/>
+
+          <!-- Bastidor inferior principal -->
+          <rect class="p-side" x="196" y="376" width="528" height="56" rx="6"/>
+          <rect class="p-main" x="202" y="382" width="516" height="44" rx="4"/>
+          ${isGlass ? `<path d="M280,175 L350,250 M540,175 L610,250" stroke="rgba(255,255,255,0.55)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
+    },
+
+    mesita(isGlass) {
+      return `
+        <ellipse cx="460" cy="492" rx="165" ry="22" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas finas -->
+          <polygon class="p-detail-dark" points="354,410 370,410 362,472 348,472"/>
+          <polygon class="p-detail-dark" points="550,410 566,410 572,472 558,472"/>
+          <polygon class="p-detail" points="334,416 352,416 340,490 326,490"/>
+          <polygon class="p-detail" points="568,416 586,416 594,490 580,490"/>
+
+          <!-- Estructura cúbica -->
+          <polygon class="p-main" points="342,205 578,205 604,232 316,232"/>
+          <rect class="p-side" x="316" y="232" width="288" height="186" rx="4"/>
+          <rect class="p-main" x="328" y="244" width="264" height="78" rx="2"/>
+          <rect class="p-main" x="328" y="330" width="264" height="76" rx="2"/>
+          <rect class="p-sheen" x="316" y="232" width="288" height="186" rx="4"/>
+
+          <!-- Tiradores -->
+          <rect class="p-detail" x="434" y="279" width="52" height="7" rx="3.5"/>
+          <rect class="p-detail" x="434" y="364" width="52" height="7" rx="3.5"/>
+          ${isGlass ? `<path d="M360,256 L410,305 M480,340 L530,390" stroke="rgba(255,255,255,0.6)" stroke-width="2.2" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
+    },
+
+    banco(isGlass) {
+      return `
+        <ellipse cx="460" cy="486" rx="270" ry="22" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas en caballete -->
+          <polygon class="p-detail-dark" points="236,368 254,368 240,468 224,468"/>
+          <polygon class="p-detail-dark" points="666,368 684,368 696,468 680,468"/>
+          <polygon class="p-detail" points="200,378 222,378 202,486 184,486"/>
+          <polygon class="p-detail" points="698,378 720,378 736,486 718,486"/>
+          <rect class="p-detail" x="212" y="428" width="496" height="10" rx="3"/>
+
+          <!-- Asiento corrido -->
+          <polygon class="p-side" points="172,350 748,350 736,378 184,378"/>
+          <polygon class="p-main" points="220,308 700,308 748,350 172,350"/>
+          <polygon class="p-sheen" points="220,308 700,308 748,350 172,350"/>
+          <path class="p-seam" d="M236,322 L684,322"/>
+          ${isGlass ? `<path d="M295,314 L350,344 M540,314 L595,344" stroke="rgba(255,255,255,0.65)" stroke-width="2.5" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
+    },
+
+    vitrina(isGlass) {
+      return `
+        <ellipse cx="460" cy="508" rx="195" ry="22" fill="url(#floor-shadow)"/>
+        <g filter="url(#soft-drop)">
+          <!-- Patas -->
+          <rect class="p-detail" x="322" y="454" width="16" height="52" rx="3"/>
+          <rect class="p-detail" x="582" y="454" width="16" height="52" rx="3"/>
+
+          <!-- Cuerpo superior vitrina -->
+          <rect class="p-side" x="302" y="96" width="316" height="362" rx="5"/>
+          <rect class="p-main" x="312" y="106" width="296" height="342" rx="3"/>
+
+          <!-- Baldas interiores visibles tras el cristal -->
+          <rect class="p-detail-dark" x="324" y="176" width="272" height="8" rx="1"/>
+          <rect class="p-detail-dark" x="324" y="254" width="272" height="8" rx="1"/>
+          <rect class="p-detail-dark" x="324" y="332" width="272" height="8" rx="1"/>
+
+          <!-- Paneles acristalados de las puertas -->
+          <rect x="326" y="118" width="128" height="228" rx="2" fill="rgba(220,235,238,0.28)" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
+          <rect x="466" y="118" width="128" height="228" rx="2" fill="rgba(220,235,238,0.28)" stroke="rgba(255,255,255,0.55)" stroke-width="1.2"/>
+          <path d="M342,140 L410,245 M482,140 L550,245" stroke="rgba(255,255,255,0.45)" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Parte inferior cerrada y tiradores -->
+          <rect class="p-main" x="322" y="356" width="134" height="84" rx="2"/>
+          <rect class="p-main" x="464" y="356" width="134" height="84" rx="2"/>
+          <rect class="p-detail" x="444" y="255" width="6" height="56" rx="3"/>
+          <rect class="p-detail" x="470" y="255" width="6" height="56" rx="3"/>
+          ${isGlass ? `<path d="M350,375 L410,425 M495,375 L555,425" stroke="rgba(255,255,255,0.55)" stroke-width="2.2" stroke-linecap="round"/>` : ""}
+        </g>
+      `;
     }
   };
 
