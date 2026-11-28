@@ -24,6 +24,17 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- Preloader elegante de entrada -->
+  <div class="site-preloader" id="site-preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-eyebrow">Estudio de Mobiliario</span>
+      <span class="preloader-wordmark">CREAMUEBLES</span>
+    </div>
+  </div>
+
+  <!-- Cursor personalizado sutil (solo escritorio) -->
+  <div class="custom-cursor" id="custom-cursor" aria-hidden="true"></div>
+
   <!-- Barra de progreso de lectura (2px) -->
   <div class="reading-progress" aria-hidden="true">
     <span class="reading-progress-bar" id="reading-progress-bar"></span>
@@ -130,6 +141,17 @@
         </div>
       </div>
     </section>
+
+    <!-- =========================================================
+         BANDA TIPOGRÁFICA EN MOVIMIENTO (MARQUEE)
+         ========================================================= -->
+    <div class="editorial-marquee" aria-label="Valores artesanales de Creamuebles">
+      <div class="marquee-track">
+        <span class="marquee-group">DISEÑO A MEDIDA · ROBLE MACIZO · FABRICACIÓN ARTESANAL · ACABADOS NATURALES · CREAMUEBLES ·&nbsp;</span>
+        <span class="marquee-group" aria-hidden="true">DISEÑO A MEDIDA · ROBLE MACIZO · FABRICACIÓN ARTESANAL · ACABADOS NATURALES · CREAMUEBLES ·&nbsp;</span>
+        <span class="marquee-group" aria-hidden="true">DISEÑO A MEDIDA · ROBLE MACIZO · FABRICACIÓN ARTESANAL · ACABADOS NATURALES · CREAMUEBLES ·&nbsp;</span>
+      </div>
+    </div>
 
     <!-- =========================================================
          SECCIÓN 2: DISEÑA TU MUEBLE (CONFIGURADOR INTERACTIVO)
@@ -369,6 +391,151 @@
     </section>
 
     <!-- =========================================================
+         SECCIÓN INTERACTIVA: EXPLORA EL ESPACIO (HOTSPOTS)
+         ========================================================= -->
+    <section id="explorar" class="hotspots-section" data-nav-group="configurador">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="eyebrow">Arquitectura en Contexto</span>
+            <h2 class="section-title">Explora el Espacio</h2>
+          </div>
+          <p class="section-subtitle">
+            Pasa el ratón o pulsa sobre cada punto de la estancia para descubrir las piezas del estudio y llevarlas directamente al configurador.
+          </p>
+        </div>
+
+        <div class="hotspot-stage reveal" id="hotspot-stage" data-delay="90">
+          <img
+            src="assets/space-hotspots.jpg"
+            alt="Salón y comedor minimalista de alta gama con mobiliario Creamuebles en lino crudo, travertino, roble natural y nogal"
+            class="hotspot-image"
+            loading="lazy"
+          />
+
+          <!-- Hotspot 1: Sofá -->
+          <div class="hotspot-item" style="--hx: 22%; --hy: 66%;" data-hotspot-id="sofa">
+            <button
+              type="button"
+              class="hotspot-dot"
+              aria-label="Ver detalles de Sofá 3 plazas Atelier"
+              aria-expanded="false"
+            >
+              <span class="hotspot-pulse" aria-hidden="true"></span>
+              <span class="hotspot-core" aria-hidden="true"></span>
+            </button>
+            <div class="hotspot-tooltip hotspot-align-left" role="dialog" aria-label="Sofá 3 plazas Atelier">
+              <span class="hotspot-tag">Salón</span>
+              <h4>Sofá 3 plazas Atelier</h4>
+              <p>Lino belga natural · Base en roble europeo</p>
+              <button
+                type="button"
+                class="hotspot-cta"
+                data-configure-furniture="sofa"
+                data-configure-material="lino-natural"
+              >
+                <span>Configurar pieza</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hotspot 2: Mesa de centro -->
+          <div class="hotspot-item" style="--hx: 31%; --hy: 78%;" data-hotspot-id="mesa-centro">
+            <button
+              type="button"
+              class="hotspot-dot"
+              aria-label="Ver detalles de Mesa de centro Monolith"
+              aria-expanded="false"
+            >
+              <span class="hotspot-pulse" aria-hidden="true"></span>
+              <span class="hotspot-core" aria-hidden="true"></span>
+            </button>
+            <div class="hotspot-tooltip" role="dialog" aria-label="Mesa de centro Monolith">
+              <span class="hotspot-tag">Piedra Natural</span>
+              <h4>Mesa de centro Monolith</h4>
+              <p>Travertino apomazado · 120 × 70 cm</p>
+              <button
+                type="button"
+                class="hotspot-cta"
+                data-configure-furniture="mesa-centro"
+                data-configure-material="travertino"
+              >
+                <span>Configurar pieza</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hotspot 3: Mesa de comedor -->
+          <div class="hotspot-item" style="--hx: 69%; --hy: 61%;" data-hotspot-id="mesa">
+            <button
+              type="button"
+              class="hotspot-dot"
+              aria-label="Ver detalles de Mesa de comedor Nord"
+              aria-expanded="false"
+            >
+              <span class="hotspot-pulse" aria-hidden="true"></span>
+              <span class="hotspot-core" aria-hidden="true"></span>
+            </button>
+            <div class="hotspot-tooltip" role="dialog" aria-label="Mesa de comedor Nord">
+              <span class="hotspot-tag">Comedor</span>
+              <h4>Mesa de comedor Nord</h4>
+              <p>Roble europeo macizo · Aceite mate</p>
+              <button
+                type="button"
+                class="hotspot-cta"
+                data-configure-furniture="mesa"
+                data-configure-material="roble-natural"
+              >
+                <span>Configurar pieza</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Hotspot 4: Aparador -->
+          <div class="hotspot-item" style="--hx: 89%; --hy: 63%;" data-hotspot-id="aparador">
+            <button
+              type="button"
+              class="hotspot-dot"
+              aria-label="Ver detalles de Aparador Siena"
+              aria-expanded="false"
+            >
+              <span class="hotspot-pulse" aria-hidden="true"></span>
+              <span class="hotspot-core" aria-hidden="true"></span>
+            </button>
+            <div class="hotspot-tooltip hotspot-align-right" role="dialog" aria-label="Aparador Siena">
+              <span class="hotspot-tag">A Medida</span>
+              <h4>Aparador Siena</h4>
+              <p>Nogal americano · Base acero negro mate</p>
+              <button
+                type="button"
+                class="hotspot-cta"
+                data-configure-furniture="aparador"
+                data-configure-material="nogal-americano"
+              >
+                <span>Configurar pieza</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta resumen móvil para hotspots -->
+        <div class="hotspot-mobile-panel" id="hotspot-mobile-panel" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          SECCIÓN 3: PROYECTOS (GALERÍA EDITORIAL)
          ========================================================= -->
     <section id="proyectos" class="projects-section">
@@ -389,6 +556,60 @@
         </div>
 
         <div class="projects-grid" id="projects-grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         COMPARADOR VISUAL DESLIZABLE (BEFORE / AFTER)
+         ========================================================= -->
+    <section id="comparador" class="compare-section" data-nav-group="proyectos">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="eyebrow">Dualidad de Acabados</span>
+            <h2 class="section-title">Compara Dos Atmósferas</h2>
+          </div>
+          <p class="section-subtitle">
+            Desliza el divisor central para contrastar cómo una misma arquitectura cambia de carácter entre la luminosidad del roble natural y la profundidad del nogal americano.
+          </p>
+        </div>
+
+        <div class="compare-stage reveal" id="compare-stage" data-delay="90" style="--split: 50%;">
+          <img
+            src="assets/compare-dark-walnut.jpg"
+            alt="Comedor minimalista Creamuebles en acabado oscuro de nogal americano"
+            class="compare-img compare-after-img"
+            loading="lazy"
+          />
+
+          <div class="compare-before" id="compare-before">
+            <img
+              src="assets/compare-light-oak.jpg"
+              alt="Comedor minimalista Creamuebles en acabado claro de roble natural"
+              class="compare-img compare-before-img"
+              loading="lazy"
+            />
+          </div>
+
+          <span class="compare-label compare-label-left">Acabado Claro · Roble Natural</span>
+          <span class="compare-label compare-label-right">Acabado Oscuro · Nogal</span>
+
+          <div class="compare-divider" id="compare-divider" aria-hidden="true"></div>
+          <button
+            type="button"
+            class="compare-handle"
+            id="compare-handle"
+            role="slider"
+            aria-label="Deslizador comparador entre acabado claro y acabado oscuro"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+              <path d="M9 7l-5 5 5 5M15 7l5 5-5 5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -546,7 +767,154 @@
     </section>
 
     <!-- =========================================================
-         SECCIÓN 4: CONTACTO
+         SECCIÓN 5: EL PROCESO ("DEL BOCETO AL ESPACIO")
+         ========================================================= -->
+    <section id="proceso" class="process-section" data-nav-group="historia" aria-labelledby="process-section-title">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="eyebrow">Metodología de Taller</span>
+            <h2 class="section-title" id="process-section-title">Del Boceto al Espacio</h2>
+          </div>
+          <p class="section-subtitle">
+            Cuatro fases pausadas donde la arquitectura interior, la materia honesta y el oficio ebanista convergen en una pieza irrepetible.
+          </p>
+        </div>
+
+        <div class="process-split" id="process-split">
+          <!-- Columna izquierda: capítulos narrativos -->
+          <div class="process-chapters">
+            <article class="process-chapter is-active" data-step="0">
+              <span class="process-bg-num" aria-hidden="true">01</span>
+              <div class="process-chapter-inner">
+                <span class="process-step-eyebrow process-reveal-el">01 · El Boceto</span>
+                <h3 class="process-chapter-title process-reveal-el">Proporción calibrada al espacio real.</h3>
+                <p class="process-chapter-copy process-reveal-el">
+                  Diseño a medida pensado para las proporciones reales del espacio. Levantamos planos, analizamos la entrada de luz natural y definimos cada canto y espesor antes de cortar la primera tabla.
+                </p>
+                <span class="process-chapter-spec process-reveal-el">Estudio de planta y alzados · Escala 1:10</span>
+                <div class="process-chapter-media process-reveal-el">
+                  <img
+                    src="assets/process-01-sketch.jpg"
+                    alt="Mesa de dibujo en roble con bocetos arquitectónicos de mobiliario a mano y regla de latón"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </article>
+
+            <article class="process-chapter" data-step="1">
+              <span class="process-bg-num" aria-hidden="true">02</span>
+              <div class="process-chapter-inner">
+                <span class="process-step-eyebrow process-reveal-el">02 · La Materia</span>
+                <h3 class="process-chapter-title process-reveal-el">Selección manual de cada veta y textura.</h3>
+                <p class="process-chapter-copy process-reveal-el">
+                  Selección manual de maderas nobles, piedra y tejidos naturales. Emparejamos tablones de roble europeo o nogal americano y contrastamos travertinos y linos belgas bajo la misma luz.
+                </p>
+                <span class="process-chapter-spec process-reveal-el">Maderas certificadas FSC · Piedra natural apomazada</span>
+                <div class="process-chapter-media process-reveal-el">
+                  <img
+                    src="assets/process-02-material.jpg"
+                    alt="Muestrario de maderas europeas, piedra travertino, latón cepillado y tejidos de lino natural"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </article>
+
+            <article class="process-chapter" data-step="2">
+              <span class="process-bg-num" aria-hidden="true">03</span>
+              <div class="process-chapter-inner">
+                <span class="process-step-eyebrow process-reveal-el">03 · El Oficio</span>
+                <h3 class="process-chapter-title process-reveal-el">Ensamble artesanal y tacto sedoso.</h3>
+                <p class="process-chapter-copy process-reveal-el">
+                  Ensamblaje artesanal y acabados al aceite hechos a mano. Trabajamos uniones tradicionales reforzadas y aplicamos aceites vegetales mate en varias pasadas para preservar el poro abierto.
+                </p>
+                <span class="process-chapter-spec process-reveal-el">Caja y espiga · Acabado al aceite vegetal mate</span>
+                <div class="process-chapter-media process-reveal-el">
+                  <img
+                    src="assets/process-03-craft.jpg"
+                    alt="Manos de ebanista aplicando aceite natural mate sobre un ensamble de roble macizo en el taller"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </article>
+
+            <article class="process-chapter" data-step="3">
+              <span class="process-bg-num" aria-hidden="true">04</span>
+              <div class="process-chapter-inner">
+                <span class="process-step-eyebrow process-reveal-el">04 · La Pieza</span>
+                <h3 class="process-chapter-title process-reveal-el">Calma y equilibrio en tu hogar.</h3>
+                <p class="process-chapter-copy process-reveal-el">
+                  Integración final en el hogar con luz y equilibrio. Entregamos y nivelamos cada mueble directamente en tu vivienda, dejando que la pieza comience a envejecer con serenidad junto a ti.
+                </p>
+                <span class="process-chapter-spec process-reveal-el">Entrega e instalación in situ · Garantía de estudio</span>
+                <div class="process-chapter-media process-reveal-el">
+                  <img
+                    src="assets/project-comedor-retiro.jpg"
+                    alt="Mesa de comedor de roble europeo terminada e integrada en un comedor minimalista bañado de luz natural"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Columna derecha: marco visual fijo (sticky en escritorio) -->
+          <div class="process-sticky-col" aria-hidden="true">
+            <div class="process-sticky-shell">
+              <div class="process-progress-rail">
+                <span class="process-counter" id="process-counter">01 / 04</span>
+                <div class="process-progress-track">
+                  <span class="process-progress-fill" id="process-progress-fill"></span>
+                </div>
+              </div>
+
+              <div class="process-visual-stage">
+                <div class="process-visual-frame" id="process-visual-frame">
+                  <img
+                    src="assets/process-01-sketch.jpg"
+                    alt=""
+                    class="process-stage-img is-active"
+                    data-step="0"
+                    loading="lazy"
+                  />
+                  <img
+                    src="assets/process-02-material.jpg"
+                    alt=""
+                    class="process-stage-img"
+                    data-step="1"
+                    loading="lazy"
+                  />
+                  <img
+                    src="assets/process-03-craft.jpg"
+                    alt=""
+                    class="process-stage-img"
+                    data-step="2"
+                    loading="lazy"
+                  />
+                  <img
+                    src="assets/project-comedor-retiro.jpg"
+                    alt=""
+                    class="process-stage-img"
+                    data-step="3"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="process-visual-caption">
+                  <span class="process-caption-step" id="process-caption-step">01 · El Boceto</span>
+                  <span class="process-caption-detail" id="process-caption-detail">Estudio de planta y alzados · Escala 1:10</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         SECCIÓN 6: CONTACTO
          ========================================================= -->
     <section id="contacto" class="contact-section">
       <div class="container">
