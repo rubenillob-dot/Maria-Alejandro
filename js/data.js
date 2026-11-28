@@ -464,5 +464,106 @@ window.CREAMUEBLES_DATA = {
     { name: "Azul petróleo", hex: "#2C4D59" },
     { name: "Madera natural", hex: "#C69C6D" },
     { name: "Tostado", hex: "#7A4E2D" }
+  ],
+
+  projectCategories: [
+    { id: "todos", name: "Todos" },
+    { id: "salon", name: "Salón" },
+    { id: "comedor", name: "Comedor" },
+    { id: "dormitorio", name: "Dormitorio" },
+    { id: "a-medida", name: "A medida" }
+  ],
+
+  projects: [
+    {
+      id: "salon-chamberi",
+      title: "Residencia Chamberí",
+      categoryId: "salon",
+      categoryLabel: "Salón",
+      materialSummary: "Lino natural · Travertino apomazado",
+      materials: "Sofá modular en lino belga crudo, mesa de centro en travertino apomazado y base de roble europeo.",
+      dimensions: "Sofá 230 × 94 cm · Mesa 120 × 70 cm",
+      year: "2026",
+      location: "Madrid",
+      description:
+        "Conjunto de estar concebido para dialogar con la luz natural de la estancia. El volumen bajo del sofá en lino lavado contrasta con una pieza monolítica de travertino natural sin selladores brillantes.",
+      image: "assets/project-salon-chamberi.jpg",
+      alt: "Salón minimalista en Chamberí con sofá bajo de lino crudo y mesa de centro de travertino apomazado"
+    },
+    {
+      id: "comedor-retiro",
+      title: "Comedor Atelier Retiro",
+      categoryId: "comedor",
+      categoryLabel: "Comedor",
+      materialSummary: "Roble europeo · Acabado aceite mate",
+      materials: "Sobre macizo de roble europeo alistonado, cantos biselados a 30° y sillería ligera en fresno torneado.",
+      dimensions: "240 × 105 × 75 cm",
+      year: "2026",
+      location: "Madrid",
+      description:
+        "Mesa de comedor de gran formato diseñada como eje arquitectónico de la vivienda. Las patas remetidas liberan visualmente el perímetro y acogen hasta ocho comensales con ligereza.",
+      image: "assets/project-comedor-retiro.jpg",
+      alt: "Comedor minimalista con mesa de roble europeo macizo y sillas de fresno junto a pared hueso"
+    },
+    {
+      id: "dormitorio-mirador",
+      title: "Suite Mirador",
+      categoryId: "dormitorio",
+      categoryLabel: "Dormitorio",
+      materialSummary: "Nogal americano · Latón cepillado",
+      materials: "Estructura de cama y cabecero corrido en nogal americano aceitado con mesitas suspendidas y tiradores en latón satinado.",
+      dimensions: "Cabecero 290 × 105 cm · Cama 180 × 200 cm",
+      year: "2025",
+      location: "Alcalá de Henares",
+      description:
+        "Cabecero horizontal que integra las mesitas de noche en una sola línea continua, liberando el suelo y aportando serenidad cromática mediante la veta profunda del nogal.",
+      image: "assets/project-dormitorio-mirador.jpg",
+      alt: "Dormitorio sereno con cama y cabecero corrido de nogal americano y detalles de latón cepillado"
+    },
+    {
+      id: "amedida-velazquez",
+      title: "Biblioteca Estudio Velázquez",
+      categoryId: "a-medida",
+      categoryLabel: "A medida",
+      materialSummary: "Roble natural · Acero negro mate",
+      materials: "Estantería modular de suelo a techo con montantes en acero lacado negro mate, baldas en roble natural y escritorio integrado.",
+      dimensions: "340 × 38 × 265 cm",
+      year: "2025",
+      location: "Madrid",
+      description:
+        "Sistema arquitectónico diseñado al milímetro para un despacho residencial. Combina almacenaje abierto, superficie de trabajo escamoteable y canalización oculta de cableado.",
+      image: "assets/project-amedida-velazquez.jpg",
+      alt: "Estantería modular y escritorio a medida de suelo a techo en roble natural y acero negro mate"
+    },
+    {
+      id: "comedor-pozuelo",
+      title: "Casa Pozuelo",
+      categoryId: "comedor",
+      categoryLabel: "Comedor",
+      materialSummary: "Nogal americano · Mármol Marquina",
+      materials: "Aparador de cuatro puertas en nogal americano con sobre encastrado en mármol negro Marquina y zócalo en latón cepillado.",
+      dimensions: "210 × 46 × 78 cm",
+      year: "2025",
+      location: "Pozuelo de Alarcón",
+      description:
+        "Pieza protagonista de comedor concebida desde la sobriedad geométrica. El encuentro entre la piedra veteada y la madera oscura se resuelve con una junta perimetral de latón satinado.",
+      image: "assets/project-comedor-pozuelo.jpg",
+      alt: "Aparador minimalista de nogal americano con tapa de mármol negro Marquina y detalles de latón"
+    },
+    {
+      id: "amedida-serrano",
+      title: "Vestíbulo Serrano",
+      categoryId: "a-medida",
+      categoryLabel: "A medida",
+      materialSummary: "Fresno cepillado · Cristal ahumado",
+      materials: "Banco de entrada en fresno nórdico macizo y vitrina alta en roble ebonizado con puertas de cristal templado ahumado.",
+      dimensions: "Banco 145 × 40 × 45 cm · Vitrina 100 × 42 × 195 cm",
+      year: "2026",
+      location: "Madrid",
+      description:
+        "Composición de bienvenida que equilibra ligereza visual y orden diario. La vitrina tamiza los reflejos a través del vidrio ahumado mientras el banco aporta una textura cálida al acceso.",
+      image: "assets/project-amedida-serrano.jpg",
+      alt: "Vestíbulo minimalista con banco de fresno macizo y vitrina alta con cristal ahumado"
+    }
   ]
 };

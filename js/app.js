@@ -21,13 +21,18 @@
     syncColors: false,
     showGrid: true,
     viewMode: "2d", // "2d" | "3d"
-    autoRotate: false
+    autoRotate: false,
+    activeProjectCategory: "todos",
+    lightboxIndex: -1
   };
 
   let renderer3D = null;
+  let revealObserver = null;
+  let lastFocusedTrigger = null;
 
   // Referencias DOM
   const els = {
+    readingProgressBar: document.getElementById("reading-progress-bar"),
     header: document.getElementById("site-header"),
     navToggle: document.getElementById("nav-toggle"),
     mainNav: document.getElementById("main-nav"),
@@ -67,6 +72,7 @@
     customHexInput: document.getElementById("custom-hex-input"),
 
     summaryFurnitureName: document.getElementById("summary-furniture-name"),
+    summaryDimensions: document.getElementById("summary-dimensions"),
     summaryPrice: document.getElementById("summary-price"),
     summaryMaterial: document.getElementById("summary-material"),
     summaryPrimarySwatch: document.getElementById("summary-primary-swatch"),
@@ -74,6 +80,7 @@
     summaryDetailSwatch: document.getElementById("summary-detail-swatch"),
     summaryDetailText: document.getElementById("summary-detail-text"),
     requestQuoteBtn: document.getElementById("request-quote-btn"),
+    directorActionBtns: document.querySelectorAll("[data-contact-director]"),
 
     contactSection: document.getElementById("contacto"),
     contactFormWrap: document.querySelector(".contact-form-wrap"),
@@ -83,7 +90,24 @@
     contactMessage: document.getElementById("contact-message"),
     prefillBanner: document.getElementById("prefill-banner"),
     clearPrefillBtn: document.getElementById("clear-prefill-btn"),
-    formFeedback: document.getElementById("form-feedback")
+    formFeedback: document.getElementById("form-feedback"),
+
+    projectsFilters: document.getElementById("projects-filters"),
+    projectsCount: document.getElementById("projects-count"),
+    projectsGrid: document.getElementById("projects-grid"),
+    lightbox: document.getElementById("project-lightbox"),
+    lightboxCloseBtn: document.getElementById("lightbox-close-btn"),
+    lightboxPrevBtn: document.getElementById("lightbox-prev-btn"),
+    lightboxNextBtn: document.getElementById("lightbox-next-btn"),
+    lightboxImg: document.getElementById("lightbox-img"),
+    lightboxCounter: document.getElementById("lightbox-counter"),
+    lightboxCategory: document.getElementById("lightbox-category"),
+    lightboxTitle: document.getElementById("lightbox-title"),
+    lightboxDescription: document.getElementById("lightbox-description"),
+    lightboxMaterials: document.getElementById("lightbox-materials"),
+    lightboxDimensions: document.getElementById("lightbox-dimensions"),
+    lightboxYear: document.getElementById("lightbox-year"),
+    lightboxInquireBtn: document.getElementById("lightbox-inquire-btn")
   };
 
   function getSelectedFurniture() {
@@ -244,7 +268,7 @@
     }, 150);
   }
 
-  function updateStageAndSummary(withSwitchAnimation = false) {
+  function updateStageAndSummary(transitionMode = false) {
     const furniture = getSelectedFurniture();
     const material = getSelectedMaterial();
     const priceStr = calculatePrice(furniture, material);
@@ -265,6 +289,9 @@
 
     // Actualizar ficha resumen en tiempo real
     els.summaryFurnitureName.textContent = furniture.name;
+    if (els.summaryDimensions) {
+      els.summaryDimensions.textContent = furniture.dimensions;
+    }
     els.summaryPrice.textContent = priceStr;
     els.summaryMaterial.textContent = `${material.categoryName} · ${material.name}`;
 
@@ -282,18 +309,23 @@
       showGrid: state.showGrid
     };
 
-    if (withSwitchAnimation) {
+    if (transitionMode === true || transitionMode === "switch") {
       els.svgViewport.classList.add("is-switching");
       window.setTimeout(() => {
         renderActiveViewport(renderArgs);
         els.svgViewport.classList.remove("is-switching");
       }, 150);
+    } else if (transitionMode === "tone") {
+      els.svgViewport.classList.remove("is-tone-updating");
+      renderActiveViewport(renderArgs);
+      void els.svgViewport.offsetWidth;
+      els.svgViewport.classList.add("is-tone-updating");
     } else {
       renderActiveViewport(renderArgs);
     }
   }
 
-  function applyColor(hex) {
+  function applyColor(hex, animateTone = true) {
     const normalized = hex.toUpperCase();
     if (state.syncColors) {
       state.primaryColor = normalized;
@@ -304,7 +336,7 @@
       state.detailColor = normalized;
     }
     renderColorPalette();
-    updateStageAndSummary(false);
+    updateStageAndSummary(animateTone ? "tone" : false);
   }
 
   /* ========================================================================
@@ -378,7 +410,7 @@
 
       renderMaterialOptions();
       renderColorPalette();
-      updateStageAndSummary(false);
+      updateStageAndSummary("tone");
     });
 
     // Selector de zona de color (Estructura principal vs Detalles/patas)
@@ -400,7 +432,7 @@
       if (state.syncColors) {
         state.detailColor = state.primaryColor;
         renderColorPalette();
-        updateStageAndSummary(false);
+        updateStageAndSummary("tone");
       }
     });
 
@@ -408,12 +440,12 @@
     els.colorPalette.addEventListener("click", (e) => {
       const swatch = e.target.closest("[data-hex]");
       if (!swatch) return;
-      applyColor(swatch.dataset.hex);
+      applyColor(swatch.dataset.hex, true);
     });
 
     // Color picker nativo en tiempo real
     els.customColorInput.addEventListener("input", (e) => {
-      applyColor(e.target.value);
+      applyColor(e.target.value, false);
     });
 
     // Entrada manual de código HEX
@@ -421,7 +453,7 @@
       let val = e.target.value.trim();
       if (!val.startsWith("#")) val = `#${val}`;
       if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-        applyColor(val);
+        applyColor(val, true);
       }
     });
 
@@ -526,6 +558,32 @@
       els.prefillBanner.classList.add("hidden");
     });
 
+    // Botones directos en tarjetas editoriales de Alejandro y María
+    els.directorActionBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const directorName = btn.dataset.contactDirector || "Creamuebles";
+        const firstName = directorName.split(" ")[0];
+        const currentMsg = els.contactMessage.value.trim();
+
+        if (!currentMsg) {
+          els.contactMessage.value = `Hola ${firstName}, me gustaría recibir asesoramiento personalizado para un mueble a medida:\n\n`;
+        }
+
+        els.contactFormWrap.classList.remove("highlight-pulse");
+        void els.contactFormWrap.offsetWidth;
+        els.contactFormWrap.classList.add("highlight-pulse");
+
+        els.contactFormWrap.scrollIntoView({ behavior: "smooth", block: "center" });
+        window.setTimeout(() => {
+          if (!els.contactName.value.trim()) {
+            els.contactName.focus({ preventScroll: true });
+          } else {
+            els.contactMessage.focus({ preventScroll: true });
+          }
+        }, 420);
+      });
+    });
+
     // Menú móvil
     els.navToggle.addEventListener("click", () => {
       const isOpen = els.mainNav.classList.toggle("open");
@@ -539,12 +597,22 @@
       });
     });
 
-    // Sombra sutil en header al hacer scroll y estado activo de sección
+    // Sombra sutil en header, estado activo de sección y barra de progreso de lectura
     const sections = Array.from(document.querySelectorAll("main section[id]"));
-    window.addEventListener("scroll", () => {
-      els.header.classList.toggle("scrolled", window.scrollY > 18);
+    let scrollRafPending = false;
 
-      const scrollPos = window.scrollY + 140;
+    function updateScrollUI() {
+      scrollRafPending = false;
+      const scrollY = window.scrollY;
+      els.header.classList.toggle("scrolled", scrollY > 18);
+
+      if (els.readingProgressBar) {
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollY / docHeight)) : 0;
+        els.readingProgressBar.style.transform = `scaleX(${progress.toFixed(4)})`;
+      }
+
+      const scrollPos = scrollY + 140;
       let currentId = "inicio";
       for (const sec of sections) {
         if (sec.offsetTop <= scrollPos) {
@@ -554,7 +622,264 @@
       els.navLinks.forEach((link) => {
         link.classList.toggle("active", link.dataset.section === currentId);
       });
-    }, { passive: true });
+    }
+
+    updateScrollUI();
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!scrollRafPending) {
+          scrollRafPending = true;
+          window.requestAnimationFrame(updateScrollUI);
+        }
+      },
+      { passive: true }
+    );
+  }
+
+  /* ========================================================================
+     GALERÍA DE PROYECTOS Y LIGHTBOX MODAL
+     ======================================================================== */
+  function getFilteredProjects() {
+    const list = DATA.projects || [];
+    if (state.activeProjectCategory === "todos") return list;
+    return list.filter((project) => project.categoryId === state.activeProjectCategory);
+  }
+
+  function renderProjectFilters() {
+    if (!els.projectsFilters || !DATA.projectCategories) return;
+    els.projectsFilters.innerHTML = DATA.projectCategories
+      .map((cat) => {
+        const isActive = cat.id === state.activeProjectCategory;
+        return `
+          <button
+            type="button"
+            class="project-filter-btn ${isActive ? "active" : ""}"
+            data-project-category="${cat.id}"
+            role="tab"
+            aria-selected="${isActive}"
+          >
+            ${cat.name}
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  function renderProjectCards(animateFilter = false) {
+    if (!els.projectsGrid) return;
+    const projects = getFilteredProjects();
+
+    if (els.projectsCount) {
+      els.projectsCount.textContent = `${projects.length} ${projects.length === 1 ? "proyecto" : "proyectos"}`;
+    }
+
+    const buildCardsHtml = () =>
+      projects
+        .map((project, index) => {
+          const delay = (index % 3) * 70;
+          const revealClasses = animateFilter ? "reveal is-visible is-entering" : "reveal";
+          const delayStyle = animateFilter ? `style="animation-delay: ${index * 45}ms"` : `data-delay="${delay}"`;
+          return `
+            <article class="project-card ${revealClasses}" ${delayStyle}>
+              <button
+                type="button"
+                class="project-card-trigger"
+                data-project-id="${project.id}"
+                aria-label="Ver ficha ampliada de ${project.title}, ${project.categoryLabel}"
+              >
+                <div class="project-card-media">
+                  <img
+                    src="${project.image}"
+                    alt="${project.alt}"
+                    loading="lazy"
+                  />
+                  <span class="project-card-scrim" aria-hidden="true"></span>
+                  <span class="project-card-cue" aria-hidden="true">
+                    <span>Ver ficha</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                      <path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="project-card-body">
+                  <div class="project-card-meta">
+                    <span class="project-category">${project.categoryLabel}</span>
+                    <span class="project-year">${project.year}</span>
+                  </div>
+                  <h3 class="project-title">${project.title}</h3>
+                  <p class="project-material">${project.materialSummary}</p>
+                </div>
+              </button>
+            </article>
+          `;
+        })
+        .join("");
+
+    if (animateFilter) {
+      els.projectsGrid.classList.add("is-filtering");
+      window.setTimeout(() => {
+        els.projectsGrid.innerHTML = buildCardsHtml();
+        void els.projectsGrid.offsetWidth;
+        els.projectsGrid.classList.remove("is-filtering");
+      }, 180);
+    } else {
+      els.projectsGrid.innerHTML = buildCardsHtml();
+      if (revealObserver) {
+        els.projectsGrid.querySelectorAll(".reveal:not(.is-visible)").forEach((el) => {
+          revealObserver.observe(el);
+        });
+      }
+    }
+  }
+
+  function updateLightboxContent(swapAnimation = false) {
+    const projects = getFilteredProjects();
+    if (!projects.length || state.lightboxIndex < 0 || state.lightboxIndex >= projects.length) return;
+
+    const project = projects[state.lightboxIndex];
+    const total = String(projects.length).padStart(2, "0");
+    const current = String(state.lightboxIndex + 1).padStart(2, "0");
+
+    const applyFields = () => {
+      els.lightboxImg.src = project.image;
+      els.lightboxImg.alt = project.alt;
+      els.lightboxCounter.textContent = `${current} / ${total}`;
+      els.lightboxCategory.textContent = project.categoryLabel;
+      els.lightboxTitle.textContent = project.title;
+      els.lightboxDescription.textContent = project.description;
+      els.lightboxMaterials.textContent = project.materials;
+      els.lightboxDimensions.textContent = project.dimensions;
+      els.lightboxYear.textContent = `${project.year} · ${project.location}`;
+    };
+
+    const showNav = projects.length > 1;
+    els.lightboxPrevBtn.disabled = !showNav;
+    els.lightboxNextBtn.disabled = !showNav;
+
+    if (swapAnimation) {
+      els.lightboxImg.classList.add("is-swapping");
+      window.setTimeout(() => {
+        applyFields();
+        els.lightboxImg.classList.remove("is-swapping");
+      }, 120);
+    } else {
+      applyFields();
+    }
+  }
+
+  function openLightbox(projectId, triggerEl = null) {
+    if (!els.lightbox) return;
+    const projects = getFilteredProjects();
+    const index = projects.findIndex((p) => p.id === projectId);
+    if (index === -1) return;
+
+    lastFocusedTrigger = triggerEl || document.activeElement;
+    state.lightboxIndex = index;
+    updateLightboxContent(false);
+
+    els.lightbox.classList.add("is-open");
+    els.lightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("lightbox-open");
+
+    window.setTimeout(() => {
+      els.lightboxCloseBtn.focus({ preventScroll: true });
+    }, 60);
+  }
+
+  function closeLightbox(restoreFocus = true) {
+    if (!els.lightbox || !els.lightbox.classList.contains("is-open")) return;
+    els.lightbox.classList.remove("is-open");
+    els.lightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lightbox-open");
+    state.lightboxIndex = -1;
+
+    if (restoreFocus && lastFocusedTrigger && typeof lastFocusedTrigger.focus === "function") {
+      lastFocusedTrigger.focus({ preventScroll: true });
+    }
+    lastFocusedTrigger = null;
+  }
+
+  function navigateLightbox(step) {
+    const projects = getFilteredProjects();
+    if (projects.length <= 1) return;
+    state.lightboxIndex = (state.lightboxIndex + step + projects.length) % projects.length;
+    updateLightboxContent(true);
+  }
+
+  function bindProjectsEvents() {
+    if (!els.projectsFilters || !els.projectsGrid || !els.lightbox) return;
+
+    els.projectsFilters.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-project-category]");
+      if (!btn) return;
+      const nextCategory = btn.dataset.projectCategory;
+      if (nextCategory === state.activeProjectCategory) return;
+
+      state.activeProjectCategory = nextCategory;
+      renderProjectFilters();
+      renderProjectCards(true);
+    });
+
+    els.projectsGrid.addEventListener("click", (e) => {
+      const trigger = e.target.closest("[data-project-id]");
+      if (!trigger) return;
+      openLightbox(trigger.dataset.projectId, trigger);
+    });
+
+    els.lightboxCloseBtn.addEventListener("click", () => closeLightbox(true));
+    els.lightboxPrevBtn.addEventListener("click", () => navigateLightbox(-1));
+    els.lightboxNextBtn.addEventListener("click", () => navigateLightbox(1));
+
+    els.lightbox.addEventListener("click", (e) => {
+      if (e.target.closest("[data-lightbox-close]")) {
+        closeLightbox(true);
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!els.lightbox.classList.contains("is-open")) return;
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeLightbox(true);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        navigateLightbox(-1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        navigateLightbox(1);
+      }
+    });
+
+    els.lightboxInquireBtn.addEventListener("click", () => {
+      const projects = getFilteredProjects();
+      const project = projects[state.lightboxIndex];
+      closeLightbox(false);
+
+      if (project && els.contactMessage) {
+        els.contactMessage.value = [
+          `Hola Alejandro y María, me gustaría consultar por un diseño similar al proyecto «${project.title}» (${project.categoryLabel}):`,
+          "",
+          `• Acabados de referencia: ${project.materialSummary}`,
+          `• Dimensiones orientativas del proyecto: ${project.dimensions}`,
+          "",
+          "Me gustaría valorar su adaptación a las medidas de mi espacio."
+        ].join("\n");
+        els.prefillBanner.classList.remove("hidden");
+      }
+
+      if (els.contactSection) {
+        els.contactSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      if (els.contactFormWrap) {
+        els.contactFormWrap.classList.remove("highlight-pulse");
+        void els.contactFormWrap.offsetWidth;
+        els.contactFormWrap.classList.add("highlight-pulse");
+      }
+      window.setTimeout(() => {
+        if (els.contactName) els.contactName.focus({ preventScroll: true });
+      }, 550);
+    });
   }
 
   /* ========================================================================
@@ -587,7 +912,7 @@
       return;
     }
 
-    const observer = new IntersectionObserver(
+    revealObserver = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -601,7 +926,7 @@
 
     targets.forEach((el) => {
       if (!el.classList.contains("is-visible")) {
-        observer.observe(el);
+        revealObserver.observe(el);
       }
     });
   }
@@ -649,7 +974,10 @@
     renderMaterialOptions();
     renderColorPalette();
     updateStageAndSummary(false);
+    renderProjectFilters();
+    renderProjectCards(false);
     bindConfiguratorEvents();
+    bindProjectsEvents();
     bindContactAndNavEvents();
     initScrollReveal();
   }
